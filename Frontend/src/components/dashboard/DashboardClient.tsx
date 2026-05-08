@@ -19,6 +19,7 @@ function formatDate(iso: string) {
   });
 }
 
+
 const recentExecutions = mockExecutions.slice(0, 8);
 
 export default function DashboardClient() {

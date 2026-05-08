@@ -1,9 +1,14 @@
+using Specials.DB.TestingClass;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+var open_testing = new DBTestClass();
+open_testing.Dbtesting();
 
 var app = builder.Build();
 
