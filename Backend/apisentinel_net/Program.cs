@@ -1,4 +1,7 @@
 using Specials.DB.TestingClass;
+using Services.Consorcio;
+ 
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -6,6 +9,9 @@ var builder = WebApplication.CreateBuilder(args);
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+var receber = new Consorcio();
+receber.Gerarconsorcio();
 
 var open_testing = new DBTestClass(builder.Configuration);
 open_testing.ConnDBTesting();
