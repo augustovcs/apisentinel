@@ -7,8 +7,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-var open_testing = new DBTestClass();
-open_testing.Dbtesting();
+var open_testing = new DBTestClass(builder.Configuration);
+open_testing.ConnDBTesting();
 
 var app = builder.Build();
 

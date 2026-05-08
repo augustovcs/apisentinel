@@ -1,17 +1,29 @@
 using System;
 using Microsoft.Data.SqlClient;
+using System.Configuration;
 
 namespace Specials.DB.TestingClass;
 
 class DBTestClass
 {
-    public void Dbtesting()
+
+    private readonly IConfiguration _configuration;
+
+    public DBTestClass(IConfiguration configuration)
     {
-        string connectionString = "Server=localhost;Database=SEU_BANCO;Trusted_Connection=True;TrustServerCertificate=True;";
+        _configuration = configuration;
+    }
+
+    public void ConnDBTesting()
+    {
+
+        //string connectionString = "Server=localhost;Database=SEU_BANCO;Trusted_Connection=True;TrustServerCertificate=True;";
+
+        var connectionStringBuilder = _configuration.GetConnectionString("DefaultConnection");
 
         try
         {
-            using (SqlConnection connection = new SqlConnection(connectionString))
+            using (SqlConnection connection = new SqlConnection(connectionStringBuilder))
             {
                 connection.Open();
 
