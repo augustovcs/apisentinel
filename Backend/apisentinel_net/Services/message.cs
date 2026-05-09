@@ -4,7 +4,7 @@ namespace Services.Consorcio;
 public class Consorcio
 {
     private List<PessoaDTO> augusto = new List<PessoaDTO>();
-    public  void Gerarconsorcio()
+    public  List<PessoaDTO> Gerarconsorcio()
     {
         augusto.Add(new PessoaDTO
         {
@@ -12,6 +12,6 @@ public class Consorcio
             CPF = 123,
             pagamento = 400
         });
-        
+        return augusto;
     }
 }
