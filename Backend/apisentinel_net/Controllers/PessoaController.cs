@@ -19,10 +19,10 @@ public class PessoaController : ControllerBase
 
 
     [HttpGet("/Pessoa")]
-    public ActionResult<List<PessoaDTO>> search()
+    public async Task<IActionResult> search()
     {
         
-        var gerarAlgo = _consorcio.Gerarconsorcio();
+        var gerarAlgo = await _consorcio.GetConsorcio();
 
         return Ok(gerarAlgo);
     }

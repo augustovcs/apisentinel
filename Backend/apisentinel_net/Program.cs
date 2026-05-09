@@ -1,4 +1,5 @@
 using Specials.DB.TestingClass;
+using Supabase;
 using Services.Consorcio;
 //using Microsoft.AspNetCore.Mvc;
 
@@ -12,7 +13,29 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddControllers();
 
-builder.Services.AddSingleton<Consorcio>();
+
+//SUPABASE CONEXAO
+builder.Services.AddScoped<Supabase.Client>(sp =>
+{
+    var config = sp.GetRequiredService<IConfiguration>();
+
+    var client = new Supabase.Client(
+        config["SupabaseUrl"] ?? throw new ArgumentNullException("SupabaseUrl"),
+        config["SupabaseKey"] ?? throw new ArgumentNullException("SupabaseKey"),
+        new SupabaseOptions
+        {
+            AutoRefreshToken = true,
+            AutoConnectRealtime = true,
+        }
+    );
+
+    // 🔥 ESSENCIAL: inicializa no próprio ciclo do DI
+    client.InitializeAsync().Wait();
+
+    return client;
+});
+
+builder.Services.AddScoped<Consorcio>();
 
 var open_testing = new DBTestClass(builder.Configuration);
 open_testing.ConnDBTesting();

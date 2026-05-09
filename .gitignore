@@ -26,6 +26,7 @@ packages/
 # App settings (may contain secrets / connection strings)
 appsettings.json
 appsettings.*.json
+appsettings.Development.json
 
 # MSBuild
 *.user

@@ -1,24 +1,35 @@
 using DTOs;
 using Microsoft.VisualBasic;
 namespace Services.Consorcio;
-
+using Models;
+using Supabase;
 
 public class Consorcio
 {
 
-    Random random_num = new Random();
+    public readonly Supabase.Client _supabase;
+
+    public Consorcio(Supabase.Client supabase)
+    {
+        _supabase = supabase;
+    }
 
     private  List<PessoaDTO> augusto = new List<PessoaDTO>();
-    public  List<PessoaDTO> Gerarconsorcio()
+
+    public async Task<List<PessoaDTO>> GetConsorcio()
     {
+    
+        var response = await _supabase
+        .From<PessoaModel>()
+        .Get();
 
-        foreach(var pessoa in augusto){
-            Console.WriteLine($"Nome: {pessoa.Id}");
-            Console.WriteLine($"Idade: {pessoa.CPF}");
-            Console.WriteLine("----------------");
-        }
-
-        return augusto;
+        return response.Models.Select(x => new PessoaDTO
+        {
+            Id = x.Id,
+            CPF = x.Cpf,
+            pagamento = x.Pagamento
+        }).ToList();
+     
     }
 
     public List<PessoaDTO> PostConsorcio(int id_code, int cpf_code, int pag)
