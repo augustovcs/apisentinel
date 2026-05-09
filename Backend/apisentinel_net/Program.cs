@@ -12,10 +12,7 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddControllers();
 
-builder.Services.AddScoped<Consorcio>();
-
-var receber = new Consorcio();
-receber.Gerarconsorcio();
+builder.Services.AddSingleton<Consorcio>();
 
 var open_testing = new DBTestClass(builder.Configuration);
 open_testing.ConnDBTesting();
