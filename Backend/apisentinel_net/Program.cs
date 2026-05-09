@@ -1,6 +1,6 @@
 using Specials.DB.TestingClass;
 using Services.Consorcio;
- 
+//using Microsoft.AspNetCore.Mvc;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -10,6 +10,10 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddControllers();
+
+builder.Services.AddScoped<Consorcio>();
+
 var receber = new Consorcio();
 receber.Gerarconsorcio();
 
@@ -17,6 +21,7 @@ var open_testing = new DBTestClass(builder.Configuration);
 open_testing.ConnDBTesting();
 
 var app = builder.Build();
+app.MapControllers();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
