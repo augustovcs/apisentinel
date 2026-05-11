@@ -1,10 +1,10 @@
 namespace DTOs;
 
-public class FinanceRequestDTO
-{
-    public int CPF { get; set;  }
+public record CriarClienteRequest(
+    string nome,
+    string CPF,
+    string Email,
+    string RendaMensal,
+    string Telefone
     
-    public int HistoricoDeCredito { get; set; }
-    
-    public int ScoreDeCredito { get; set; }
-}
+    );

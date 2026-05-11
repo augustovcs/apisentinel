@@ -1,8 +1,11 @@
 namespace DTOs;
 
-public class FinanceResponseDTO
-{
-    public int CPF { get; set; }
-    
-    
-}
+public record ClienteResponse(
+    Guid Id,
+    string nome,
+    string CPF,
+    string Email,
+    string Telefone,
+    string RendaMensal,
+    DateTime CriadoEm
+);
