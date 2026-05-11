@@ -1,11 +1,11 @@
 using DTOs;
-
+using Interface;
 namespace Services.Finance;
 
-public class FinancialOperations
+public class FinancialOperations: IFinanceService
 {
     // the five methods for financial use
-    public decimal soma(decimal n1, decimal n2 )
+    public decimal somar(decimal n1, decimal n2 )
     {
         return n1 + n2;
     }
@@ -38,7 +38,7 @@ public class FinancialOperations
     public async Task<Dictionary<string, decimal>> PostCalcularTudo(decimal n1, decimal n2)
     {
         var resultado = new Dictionary<string, decimal>();
-            resultado.Add("somar",soma( n1 , n2));
+            resultado.Add("somar",somar( n1 , n2));
             resultado.Add("subtrair", subtrair(n1,  n2));
             resultado.Add("multiplicar", multiplicar(n1, n2));
             resultado.Add("SimularPagamento", SimularPagamento( n1, n2));
