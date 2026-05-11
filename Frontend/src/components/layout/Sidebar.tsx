@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 
 const NAV_ITEMS = [
   {
-    href: "/",
+    href: "/dashboard",
     label: "Dashboard",
     icon: (
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="square">
@@ -17,7 +17,7 @@ const NAV_ITEMS = [
     ),
   },
   {
-    href: "/tests",
+    href: "/dashboard/tests",
     label: "Tests",
     icon: (
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="square">
@@ -26,7 +26,7 @@ const NAV_ITEMS = [
     ),
   },
   {
-    href: "/executions",
+    href: "/dashboard/executions",
     label: "Executions",
     icon: (
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="square">
@@ -36,7 +36,7 @@ const NAV_ITEMS = [
     ),
   },
   {
-    href: "/settings",
+    href: "/dashboard/settings",
     label: "Settings",
     icon: (
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="square">
@@ -51,7 +51,7 @@ export default function Sidebar() {
   const pathname = usePathname();
 
   const isActive = (href: string) => {
-    if (href === "/") return pathname === "/";
+    if (href === "/dashboard") return pathname === "/dashboard" || pathname.startsWith("/dashboard");
     return pathname.startsWith(href);
   };
 

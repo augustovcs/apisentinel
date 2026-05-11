@@ -16,7 +16,7 @@ export default function TestsClient() {
         title="Tests"
         subtitle={`${mockTests.length} configured API tests`}
         actions={
-          <Link href="/tests/new" style={{ textDecoration: "none" }}>
+          <Link href="/dashboard/tests/new" style={{ textDecoration: "none" }}>
             <Button variant="primary" size="sm">
               <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="square">
                 <line x1="12" y1="5" x2="12" y2="19" />
@@ -35,7 +35,7 @@ export default function TestsClient() {
             header: "Name",
             render: (val, row) => (
               <Link
-                href={`/tests/${(row as unknown as ApiTest).id}/edit`}
+                href={`/dashboard/tests/${(row as unknown as ApiTest).id}/edit`}
                 style={{ color: "#0B3D2E", fontWeight: 500, textDecoration: "none" }}
               >
                 {val as string}
@@ -113,7 +113,7 @@ export default function TestsClient() {
 function ActionButtons({ id }: { id: string }) {
   return (
     <div style={{ display: "flex", gap: "6px" }}>
-      <Link href={`/tests/${id}/edit`} style={{ textDecoration: "none" }}>
+      <Link href={`/dashboard/tests/${id}/edit`} style={{ textDecoration: "none" }}>
         <ActionBtn color="#374151" borderColor="#D1D5DB" hoverBg="#F3F4F6">Edit</ActionBtn>
       </Link>
       <ActionBtn color="#27AE60" borderColor="#27AE60" hoverBg="#F0FDF4">Run</ActionBtn>

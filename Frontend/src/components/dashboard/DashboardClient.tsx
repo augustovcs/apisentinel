@@ -104,7 +104,7 @@ export default function DashboardClient() {
             Recent Executions
           </h2>
           <Link
-            href="/executions"
+            href="/dashboard/executions"
             style={{ fontSize: "12px", color: "#27AE60", textDecoration: "none", fontWeight: 500 }}
           >
             View all →
