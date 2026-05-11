@@ -1,6 +1,9 @@
 using Specials.DB.TestingClass;
 using Supabase;
 using Services.Consorcio;
+
+using Services.Finance;
+
 //using Microsoft.AspNetCore.Mvc;
 
 
@@ -37,11 +40,15 @@ builder.Services.AddScoped<Supabase.Client>(sp =>
 
 builder.Services.AddScoped<Consorcio>();
 
+builder.Services.AddScoped<FinancialOperations>();
+
 var open_testing = new DBTestClass(builder.Configuration);
 open_testing.ConnDBTesting();
 
 var app = builder.Build();
 app.MapControllers();
+
+
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

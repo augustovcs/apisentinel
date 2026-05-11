@@ -51,4 +51,9 @@ public class Consorcio
         return augusto;
     }
 
+    public static Dictionary<string, int> Lara()
+    {
+        return null;
+    }
+
 }
