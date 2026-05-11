@@ -32,16 +32,9 @@ public class ClienteService
         .Insert(cliente);
 
         
-
-        return new ClienteResponse(
-            cliente.Id,
-            cliente.Nome,
-            cliente.CPF,
-            cliente.Email,
-            cliente.Telefone,
-            cliente.RendaMensal,
-            cliente.CriadoEm
-        );
+        //MAPEADO PRA FACILITAR O RETURN NE PRORRAAAAAAAAAAA
+        return ClienteResponse.FromEntity(cliente);
+        
     }
 
 
