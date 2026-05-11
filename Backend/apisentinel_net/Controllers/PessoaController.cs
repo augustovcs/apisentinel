@@ -1,6 +1,7 @@
 using System.Formats.Asn1;
 using Services.Consorcio;
 using DTOs;
+using Services.UserService;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,8 +13,10 @@ public class PessoaController : ControllerBase
 {
 
     public readonly Consorcio _consorcio;
-    public PessoaController(Consorcio consorcio)
+    public readonly UserService _service;
+    public PessoaController(Consorcio consorcio, UserService service)
     {
+        _service = service;
         _consorcio = consorcio;
     }
 
@@ -22,7 +25,7 @@ public class PessoaController : ControllerBase
     public async Task<IActionResult> search()
     {
         
-        var gerarAlgo = await _consorcio.GetConsorcio();
+        var gerarAlgo = await _service.GetUsers();
 
         return Ok(gerarAlgo);
     }

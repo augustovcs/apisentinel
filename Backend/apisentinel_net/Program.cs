@@ -1,8 +1,9 @@
 using Specials.DB.TestingClass;
 using Supabase;
 using Services.Consorcio;
-
+using Services.UserService;
 using Services.Finance;
+using Microsoft.EntityFrameworkCore;
 
 //using Microsoft.AspNetCore.Mvc;
 
@@ -53,8 +54,17 @@ builder.Services.AddScoped<Supabase.Client>(sp =>
     return client;
 });
 
+//SQL SERVER CONN - EF CORE
+builder.Services.AddDbContext<AppDbContext>(options =>
+{
+    options.UseSqlServer(
+        builder.Configuration.GetConnectionString("DefaultConnection")
+    );
+});
+
 builder.Services.AddScoped<Consorcio>();
 builder.Services.AddScoped<FinancialOperations>();
+builder.Services.AddScoped<UserService>();
 
 var open_testing = new DBTestClass(builder.Configuration);
 open_testing.ConnDBTesting();
