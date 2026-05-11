@@ -16,21 +16,26 @@ public class ClienteService
 
     public async Task<ClienteResponse> CriarAsync(CriarClienteRequest request)
     {
-        var cliente = new Cliente
+
+        var cliente = new PessoaModel
         {
             Id = Guid.NewGuid(),
-            nome = request.nome,
+            Nome = request.nome,
             CPF = request.CPF,
             Email = request.Email,
             Telefone = request.Telefone,
             RendaMensal = request.RendaMensal,
             CriadoEm = DateTime.UtcNow
         };
-        await _supabase.From<Cliente>().Insert(cliente);
+
+        await _supabase.From<PessoaModel>()
+        .Insert(cliente);
+
+        
 
         return new ClienteResponse(
             cliente.Id,
-            cliente.nome,
+            cliente.Nome,
             cliente.CPF,
             cliente.Email,
             cliente.Telefone,

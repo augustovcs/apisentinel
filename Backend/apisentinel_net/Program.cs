@@ -63,7 +63,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 });
 
 builder.Services.AddScoped<Consorcio>();
-builder.Services.AddScoped<FinancialOperations>();
+builder.Services.AddScoped<ClienteService>();
 builder.Services.AddScoped<UserService>();
 
 var open_testing = new DBTestClass(builder.Configuration);
