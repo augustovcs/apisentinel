@@ -9,22 +9,22 @@ namespace Models
         [PrimaryKey("id")]
         public Guid Id { get; set; }
 
-        [Column("Nome")]
+        [Column("name")]
         public string Nome { get; set; }
 
-        [Column("CPF")]
+        [Column("cpf")]
         public string CPF { get; set; }
         
-        [Column (columnName:"Email")]
+        [Column ("email")]
         public string Email { get; set; }
         
-        [Column(columnName:"Telefone")]
+        [Column("phone")]
         public string Telefone { get; set; }
         
-        [Column(columnName:"Rendamensal")]
+        [Column("renda_mensal")]
         public string RendaMensal { get; set; }
         
-        [Column(columnName:"Criado_em")]
+        [Column("created_at")]
         public DateTime CriadoEm { get; set; }
 
     
