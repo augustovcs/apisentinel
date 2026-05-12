@@ -1,7 +1,10 @@
+using DTOs;
+
 namespace Interface;
 
 public interface IFinanceService
 {
-    public decimal somar(decimal n1, decimal n2);
-    
+    public Task<ClienteResponse> CriarAsync(CriarClienteRequest request);
+
+
 }
