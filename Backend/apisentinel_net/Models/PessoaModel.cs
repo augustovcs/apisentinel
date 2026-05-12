@@ -7,22 +7,22 @@ namespace Models
     public class PessoaModel : BaseModel
     {
         [PrimaryKey("id")]
-        public Guid Id { get; set; }
+        public int Id { get; set; }
 
         [Column("name")]
         public string Nome { get; set; }
 
         [Column("cpf")]
-        public string CPF { get; set; }
+        public int CPF { get; set; }
         
         [Column ("email")]
         public string Email { get; set; }
         
         [Column("phone")]
-        public string Telefone { get; set; }
+        public int Telefone { get; set; }
         
         [Column("renda_mensal")]
-        public string RendaMensal { get; set; }
+        public int RendaMensal { get; set; }
         
         [Column("created_at")]
         public DateTime CriadoEm { get; set; }
