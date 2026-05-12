@@ -3,12 +3,12 @@ using Models;
 namespace DTOs;
 
 public record ClienteResponse(
-    Guid Id,
+    int Id,
     string nome,
-    string CPF,
+    int CPF,
     string Email,
-    string Telefone,
-    string RendaMensal,
+    int Telefone,
+    int RendaMensal,
     DateTime CriadoEm
 ){
 

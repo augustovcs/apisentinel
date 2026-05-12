@@ -19,7 +19,7 @@ public class ClienteService
 
         var cliente = new PessoaModel
         {
-            Id = Guid.NewGuid(),
+            
             Nome = request.nome,
             CPF = request.CPF,
             Email = request.Email,

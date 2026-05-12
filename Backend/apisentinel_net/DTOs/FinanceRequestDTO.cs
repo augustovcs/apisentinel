@@ -2,9 +2,11 @@ namespace DTOs;
 
 public record CriarClienteRequest(
     string nome,
-    string CPF,
+    int CPF,
     string Email,
-    string RendaMensal,
-    string Telefone
+    int RendaMensal,
+    int Telefone
     
     );
+
+
