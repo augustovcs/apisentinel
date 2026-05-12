@@ -62,12 +62,19 @@ export default function PageStudies() {
             
             <h1> Hello Students </h1>
             {studies.map((study) => (
-                <div key={study.id}>
-                    <h2>{study.cpf}</h2>
-                    <h2>{study.pagamento}</h2>
+                <div 
+                key={study.id}
+                style={{display:"flex",
+                        gap: "10px",
+                        marginBottom: "0.2rem"
+                }}>
                 </div>
 
             ))}
+
+                <h2>CPF's: {studies.map(study => study.cpf).join(" | ")}</h2>
+                <h2>Métodos de pagamento: {studies.map(study => study.pagamento).join(" | ")}</h2>
+
         </div>
 
     )
