@@ -3,9 +3,12 @@ using Interface;
 using Models;
 
 namespace Services.Finance;
+
+using System.Diagnostics.CodeAnalysis;
+using System.Xml.XPath;
 using Supabase;
 
-public class ClienteService
+public class ClienteService : IFinanceService
 {
     public readonly Supabase.Client _supabase;
 
@@ -13,6 +16,15 @@ public class ClienteService
     {
         _supabase = supabase;
     }
+
+    public decimal somar(decimal n1, decimal n2)
+    {
+
+        //nao foi implementado o metodo ainda
+        throw new NotImplementedException();
+
+    }
+
 
     public async Task<ClienteResponse> CriarAsync(CriarClienteRequest request)
     {
