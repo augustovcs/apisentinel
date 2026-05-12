@@ -105,7 +105,7 @@ export default function TestForm({ initialValues, mode }: TestFormProps) {
         title={mode === "create" ? "Create Test" : "Edit Test"}
         subtitle={mode === "create" ? "Configure a new API endpoint test." : "Modify test configuration."}
         actions={
-          <Button variant="secondary" size="sm" onClick={() => router.push("/tests")}>
+          <Button variant="secondary" size="sm" onClick={() => router.push("/dashboard/tests")}>
             ← Back to Tests
           </Button>
         }

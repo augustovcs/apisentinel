@@ -1,6 +1,8 @@
 using DTOs;
 using Microsoft.VisualBasic;
 namespace Services.Consorcio;
+
+using System.Numerics;
 using Models;
 using Supabase;
 
@@ -33,7 +35,7 @@ public class Consorcio
     }
     */
 
-    public List<PessoaDTO> PostConsorcio(int id_code, int cpf_code, int pag)
+    public List<PessoaDTO> PostConsorcio(int id_code, long cpf_code, int pag)
     {
         
 
