@@ -1,6 +1,7 @@
 using DTOs;
 using Microsoft.EntityFrameworkCore;
 
+namespace DBConn;
 
 public class AppDbContext : DbContext
 {
@@ -11,4 +12,5 @@ public class AppDbContext : DbContext
     }
 
     public DbSet<PessoaDTO> Users { get; set; }
+    
 }
