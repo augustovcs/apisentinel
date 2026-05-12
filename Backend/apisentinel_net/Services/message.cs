@@ -16,7 +16,7 @@ public class Consorcio
 
     private  List<PessoaDTO> augusto = new List<PessoaDTO>();
 
-    public async Task<List<PessoaDTO>> GetConsorcio()
+   /* public async Task<List<PessoaDTO>> GetConsorcio()
     {
     
         var response = await _supabase
@@ -31,6 +31,7 @@ public class Consorcio
         }).ToList();
      
     }
+    */
 
     public List<PessoaDTO> PostConsorcio(int id_code, int cpf_code, int pag)
     {
