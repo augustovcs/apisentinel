@@ -25,6 +25,7 @@ public class ClienteService
             Email = request.Email,
             Telefone = request.Telefone,
             RendaMensal = request.RendaMensal,
+            CriadoEm = DateTime.Now
             
         };
 
