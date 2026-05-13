@@ -1,10 +1,11 @@
 using DTOs;
 using Microsoft.VisualBasic;
-namespace Services.Consorcio;
-
 using System.Numerics;
 using Models;
 using Supabase;
+
+namespace Services.Consorcio;
+
 
 public class Consorcio
 {

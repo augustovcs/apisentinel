@@ -4,7 +4,9 @@ using Services.Consorcio;
 using Services.UserService;
 using Services.Finance;
 using Microsoft.EntityFrameworkCore;
-
+using Services.Dev.Tests;
+using Interface.Dev;
+using DBConn;
 
 //using Microsoft.AspNetCore.Mvc;
 
@@ -63,9 +65,17 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     );
 });
 
+
+// SERVICES!! SERVICES!! SERVICES!! //
+
 builder.Services.AddScoped<Consorcio>();
 builder.Services.AddScoped<ClienteService>();
 builder.Services.AddScoped<UserService>();
+builder.Services.AddScoped<ITestsService, TestsService>();
+
+
+
+// ---------------------------- //
 
 var open_testing = new DBTestClass(builder.Configuration);
 open_testing.ConnDBTesting();
