@@ -1,7 +1,6 @@
 using apisentinel_net.Migrations;
 using DTOs;
 using Microsoft.EntityFrameworkCore;
-using DBConn;
 
 
 namespace Services.UserService;

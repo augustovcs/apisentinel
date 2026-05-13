@@ -1,6 +1,6 @@
 using Supabase.Postgrest.Attributes;
 using Supabase.Postgrest.Models;
-using System.Text.Json;
+using Newtonsoft.Json.Linq;
 
 namespace Models.Dev
 {
@@ -20,10 +20,10 @@ namespace Models.Dev
         public string? Method { get; set; }
 
         [Column("headers")]
-        public JsonDocument? Headers { get; set; }
+        public Dictionary<string, object> Headers { get; set; }
 
         [Column("body")]
-        public JsonDocument? Body { get; set; }
+        public Dictionary<string, object> Body { get; set; }
 
         [Column("expectedstatuscode")]
         public int? ExpectedStatusCode { get; set; }

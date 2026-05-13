@@ -1,20 +1,43 @@
 "use client";
 
 import Link from "next/link";
+import { useEffect, useState } from "react";
 import { mockTests } from "@/lib/mock-data";
 import DataTable from "@/components/ui/DataTable";
 import StatusBadge from "@/components/ui/StatusBadge";
 import MethodBadge from "@/components/ui/MethodBadge";
 import Button from "@/components/ui/Button";
 import PageHeader from "@/components/ui/PageHeader";
+import { getTests } from "@/app/services/testsService";
 import type { ApiTest } from "@/lib/types";
+import { useQuery } from "@tanstack/react-query";
 
 export default function TestsClient() {
+  const {
+    data: tests = [],
+    isLoading,
+    error,
+  } = useQuery({
+    queryKey: ["tests"],
+    queryFn: getTests,
+
+    // 1 minutos sem refetch
+    staleTime: 1000 * 60 * 1,
+  });
+
+  if (isLoading) {
+    return <div>Loading tests...</div>;
+  }
+
+  if (error) {
+    return <div>Failed to load tests.</div>;
+  }
+
   return (
     <div>
       <PageHeader
         title="Tests"
-        subtitle={`${mockTests.length} configured API tests`}
+        subtitle={`${tests.length} configured API tests`}
         actions={
           <Link href="/dashboard/tests/new" style={{ textDecoration: "none" }}>
             <Button variant="primary" size="sm">

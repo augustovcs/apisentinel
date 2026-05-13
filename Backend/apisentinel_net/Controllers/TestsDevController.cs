@@ -1,4 +1,4 @@
-using Services.Dev.Tests;
+using Interface.Dev;
 using DTOs.Dev;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,9 +10,9 @@ namespace Controllers.Development;
 
 public class TestsController : ControllerBase
 {
-    public readonly TestsService _testsService;
+    public readonly ITestsService _testsService;
 
-    public TestsController(TestsService testsService)
+    public TestsController(ITestsService testsService)
     {
         _testsService = testsService;
         

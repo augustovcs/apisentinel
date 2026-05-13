@@ -1,7 +1,6 @@
 using DTOs;
 using Microsoft.EntityFrameworkCore;
 
-namespace DBConn;
 
 public class AppDbContext : DbContext
 {

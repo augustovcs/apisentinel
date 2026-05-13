@@ -30,6 +30,8 @@ public class TestsService : ITestsService
             Name = t.Name,
             Url = t.Url,
             Method = t.Method,
+            Headers = t.Headers,
+            Body = t.Body,
             ExpectedStatusCode = t.ExpectedStatusCode,
             MaxResponseTime = t.MaxResponseTime,
             LastStatus = t.LastStatus,
