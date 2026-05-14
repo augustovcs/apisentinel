@@ -20,16 +20,17 @@ export async function getTests(): Promise<ApiTest[]> {
     return response.json();
 }
 
-export async function getTestsById(): Promise<ApiTest[]> {
-    const response = await fetch(`${API_URL}/get-test-id`, {
-        method: "POST",
+export async function getTestsById(id: number): Promise<ApiTest> {
+    const response = await fetch(`${API_URL}/get-by-${id}`, {
+        method: "GET",
         headers: {
             "Content-Type": "applcation/json"
         },
     })
      
      if (!response.ok) {
-        throw new Error("Failed to fetch!! GET TESTS");
+        console.log(response.status)
+        throw new Error("Failed to fetch!! GET TESTS BY");
     }
 
     return response.json();

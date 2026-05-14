@@ -27,7 +27,7 @@ public class TestsController : ControllerBase
         return Ok(get);
     }
 
-    [HttpGet("get-by-{id}")]
+    [HttpGet("/get-by-{id}")]
     public async Task<IActionResult> GetTestsById(int id)
     {
         

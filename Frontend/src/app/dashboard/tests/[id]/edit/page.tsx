@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { mockTests } from "@/lib/mock-data";
 import TestForm from "@/components/tests/TestForm";
 import { notFound } from "next/navigation";
-import { getTests } from "@/app/services/testsService";
+import { getTests, getTestsById } from "@/app/services/testsService";
 
 
 export const metadata: Metadata = { title: "Edit Test" };
@@ -13,12 +13,12 @@ interface EditTestPageProps {
 
 interface Props {
   params: {
-    id: string;
+    id: number;
   };
 }
 
 export default async function EditTestPage({ params }: Props) {
-  const test = await getTests(params.id);
+  const test = await getTestsById(Number(params.id));
   /*const { id } = await params;
   const test = mockTests.find((t) => t.id === id);
   if (!test) notFound();
