@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Controllers.Development;
 
 [ApiController]
-[Route("[controller]")]
+[Route("tests")]
 
 public class TestsController : ControllerBase
 {
@@ -18,7 +18,7 @@ public class TestsController : ControllerBase
         
     }
     
-    [HttpGet("/get-tests-full")]
+    [HttpGet("get-tests-full")]
     public async Task<IActionResult> GetTestsFull()
     {
         
@@ -27,12 +27,20 @@ public class TestsController : ControllerBase
         return Ok(get);
     }
 
-    [HttpGet("/get-by-{id}")]
+    [HttpGet("{id}")]
     public async Task<IActionResult> GetTestsById(int id)
     {
-        
-        var get = await _testsService.GetTestsById(id);
+        try
+        {
+            var get = await _testsService.GetTestsById(id);
+            return Ok(get);
 
-        return Ok(get);
+        }
+        catch(Exception ex)
+        {
+            return BadRequest(ex.Message);
+            
+        }
+    
     }
 }

@@ -12,26 +12,38 @@ interface EditTestPageProps {
 }
 
 interface Props {
-  params: {
-    id: number;
-  };
+  params: Promise<{
+    id: string;
+  }>;
 }
 
 export default async function EditTestPage({ params }: Props) {
-  const test = await getTestsById(Number(params.id));
+
+  const { id } = await params;
+  const test = await getTestsById(Number(id));
   /*const { id } = await params;
   const test = mockTests.find((t) => t.id === id);
   if (!test) notFound();
   */
-  return (
+ return (
     <TestForm
       mode="edit"
       initialValues={{
         name: test.name,
         url: test.url,
         method: test.method,
-        headers: test.headers.length > 0 ? test.headers : [{ key: "", value: "" }],
-        body: test.body,
+
+        headers:
+          Object.entries(test.headers).map(([key, value]) => ({
+            key,
+            value: String(value),
+          })),
+
+        body:
+          typeof test.body === "string"
+            ? test.body
+            : JSON.stringify(test.body, null, 2),
+
         expectedStatusCode: test.expectedStatusCode,
         maxResponseTime: test.maxResponseTime,
       }}

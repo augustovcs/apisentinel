@@ -5,7 +5,7 @@ const API_URL = "http://localhost:5199";
 
 export async function getTests(): Promise<ApiTest[]> {
 
-    const response = await fetch(`${API_URL}/get-tests-full`, {
+    const response = await fetch(`${API_URL}/tests/get-tests-full`, {
         method: "GET",
         headers: {
             "Content-Type": "application/json",
@@ -21,10 +21,10 @@ export async function getTests(): Promise<ApiTest[]> {
 }
 
 export async function getTestsById(id: number): Promise<ApiTest> {
-    const response = await fetch(`${API_URL}/get-by-${id}`, {
+    const response = await fetch(`${API_URL}/tests/${id}`, {
         method: "GET",
         headers: {
-            "Content-Type": "applcation/json"
+            "Content-Type": "application/json"
         },
     })
      
