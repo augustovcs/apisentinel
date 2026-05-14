@@ -14,12 +14,23 @@ export async function getTests(): Promise<ApiTest[]> {
     });
 
     if (!response.ok) {
-        
         throw new Error("Failed to fetch!! GET TESTS");
-
-
     }
 
     return response.json();
-    
+}
+
+export async function getTestsById(): Promise<ApiTest[]> {
+    const response = await fetch(`${API_URL}/get-test-id`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "applcation/json"
+        },
+    })
+
+     if (!response.ok) {
+        throw new Error("Failed to fetch!! GET TESTS");
+    }
+
+    return response.json();
 }
