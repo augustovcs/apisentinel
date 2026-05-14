@@ -1,4 +1,5 @@
 using DTOs.Product;
+using Product.models;
 
 namespace Product.Services;
 
@@ -11,9 +12,34 @@ public class ProductService
         _supabase = supabase;
     }
 
-    public async Task<ProductResponseDTO> CreateClient(ProductRequestDTO product)
+    public async Task<ProductResponseDTO> CreateClient(ProductRequestDTO request)
     {
-        var 
+        var produto = new ProductModel()
+        {
+            price = request.price,
+            discount = request.discount,
+            name = request.name,
+            category = request.category,
+            finalprice = request.finalprice
+            
+            
+            
+        };
+
+        await _supabase.From<ProductModel>()
+            .Insert(produto);
+
+        return new ProductResponseDTO
+        {
+           discount = request.discount,
+           name = request.name,
+           id = request.id,
+           price = request.price,
+           category = request.category,
+           finalprice = request.finalprice
+           
+        };
+
     }
 
     public decimal CalcularPrice(decimal price, decimal discount)
