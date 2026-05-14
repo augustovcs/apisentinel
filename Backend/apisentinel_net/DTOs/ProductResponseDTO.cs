@@ -1,3 +1,5 @@
+using Product.models;
+
 namespace DTOs.Product;
 
 public class ProductResponseDTO
@@ -14,3 +16,8 @@ public class ProductResponseDTO
     
     public decimal finalprice { get; set; }
 }
+
+
+
+
+
