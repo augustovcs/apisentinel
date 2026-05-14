@@ -65,6 +65,7 @@ export default function TestsClient() {
               </Link>
             ),
           },
+          
           {
             key: "method",
             header: "Method",
@@ -126,7 +127,8 @@ export default function TestsClient() {
             render: (val) => <ActionButtons id={val as string} />,
           },
         ]}
-        data={mockTests as unknown as Record<string, unknown>[]}
+        //tests = dev mockTests = mock view
+        data={tests as unknown as Record<string, unknown>[]}
         emptyMessage="No tests configured. Create your first test."
       />
     </div>
