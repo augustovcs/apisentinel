@@ -39,9 +39,41 @@ public class TestsService : ITestsService
             UpdatedAt = t.UpdatedAt
 
         }).ToList();
-
-
+    
     }
+    public async Task<TestsDTO> GetTestsById(int id) 
+    {   
+
+        var response = await _supabase
+        .From<TestsModel>()
+        .Where(t => t.Id == id )
+        .Get();
+
+        var t = response.Models.FirstOrDefault();
+
+        if (t == null)
+            return null;
+
+
+        return new TestsDTO
+        {
+            Id = t.Id,
+            Name = t.Name,
+            Url = t.Url,
+            Method = t.Method,
+            Headers = t.Headers,
+            Body = t.Body,
+            ExpectedStatusCode = t.ExpectedStatusCode,
+            MaxResponseTime = t.MaxResponseTime,
+            LastStatus = t.LastStatus,
+            CreatedAt = t.CreatedAt,
+            UpdatedAt = t.UpdatedAt
+
+        };
+    
+    }
+
+    
 
 
 

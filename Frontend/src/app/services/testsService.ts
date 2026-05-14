@@ -27,7 +27,7 @@ export async function getTestsById(): Promise<ApiTest[]> {
             "Content-Type": "applcation/json"
         },
     })
-
+     
      if (!response.ok) {
         throw new Error("Failed to fetch!! GET TESTS");
     }
