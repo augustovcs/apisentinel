@@ -17,6 +17,19 @@ public class TestsController : ControllerBase
         _testsService = testsService;
         
     }
+
+
+    // POST METHODS //
+    [HttpPost("create-tests")]
+    public async Task<IActionResult> CreateTest([FromBody]TestsDTO request)
+    {
+
+        throw new NotImplementedException();
+        
+    }
+
+
+    // GET METHODS //
     
     [HttpGet("get-tests-full")]
     public async Task<IActionResult> GetTestsFull()
