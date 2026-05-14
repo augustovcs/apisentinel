@@ -12,7 +12,7 @@ public class ProductModel : BaseModel
     public int Id { set; get; }
     
     [Column("price")]
-    public double price { get; set; }
+    public decimal price { get; set; }
     
     [Column("discount")]
     public decimal discount { get; set; }

@@ -1,4 +1,5 @@
 using DTOs.Product;
+using Microsoft.VisualBasic;
 using Product.models;
 
 namespace Product.Services;
@@ -14,17 +15,20 @@ public class ProductService
 
     public async Task<ProductResponseDTO> CreateClient(ProductRequestDTO request)
     {
+        //outra forma
+        decimal final_price = FinalPrice(request.price, request.discount);
+
         var produto = new ProductModel()
         {
             price = request.price,
             discount = request.discount,
             name = request.name,
             category = request.category,
-            finalprice = request.finalprice
-            
-            
+            finalprice =  final_price
+
             
         };
+
 
         await _supabase.From<ProductModel>()
             .Insert(produto);
@@ -36,7 +40,7 @@ public class ProductService
            id = request.id,
            price = request.price,
            category = request.category,
-           finalprice = request.finalprice
+           finalprice = final_price
            
         };
 
@@ -46,6 +50,8 @@ public class ProductService
     {
         return price * (discount / 100);
     }
+
+    //puxa o finalprice -> calculaprice ja vem junto
 
     public decimal FinalPrice(decimal price, decimal discount)
     {
@@ -58,4 +64,5 @@ public class ProductService
         return price;
     }   
 
+    
 }
