@@ -4,7 +4,7 @@ public class ProductRequestDTO
 {
     public int id { get; set; }
     
-    public double price { get; set; }
+    public decimal price { get; set; }
     
     public decimal discount { get; set; }
     

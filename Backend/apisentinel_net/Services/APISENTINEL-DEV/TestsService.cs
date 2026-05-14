@@ -26,7 +26,6 @@ public class TestsService : ITestsService
 
         return response.Models.Select(t => new TestsDTO
         {
-             Id = t.Id,
             Name = t.Name,
             Url = t.Url,
             Method = t.Method,
@@ -57,7 +56,7 @@ public class TestsService : ITestsService
 
         return new TestsDTO
         {
-            Id = t.Id,
+            
             Name = t.Name,
             Url = t.Url,
             Method = t.Method,
