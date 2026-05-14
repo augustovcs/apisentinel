@@ -6,7 +6,7 @@ const API_URL = "http://localhost:5199";
 export async function getTests(): Promise<ApiTest[]> {
 
     const response = await fetch(`${API_URL}/get-tests-full`, {
-        method: "POST",
+        method: "GET",
         headers: {
             "Content-Type": "application/json",
 

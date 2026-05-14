@@ -18,7 +18,7 @@ public class TestsController : ControllerBase
         
     }
     
-    [HttpPost("/get-tests-full")]
+    [HttpGet("/get-tests-full")]
     public async Task<IActionResult> GetTestsFull()
     {
         
