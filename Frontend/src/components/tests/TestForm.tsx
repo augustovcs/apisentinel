@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import Button from "@/components/ui/Button";
 import PageHeader from "@/components/ui/PageHeader";
 import type { HttpMethod, Header } from "@/lib/types";
+import { postCreateTest } from "@/app/services/testsService";
 
 const HTTP_METHODS: HttpMethod[] = ["GET", "POST", "PUT", "PATCH", "DELETE", "HEAD", "OPTIONS"];
 
@@ -82,14 +83,60 @@ export default function TestForm({ initialValues, mode }: TestFormProps) {
     return e;
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async(e: React.FormEvent) => {
     e.preventDefault();
+
     const errs = validate();
-    if (Object.keys(errs).length > 0) { setErrors(errs); return; }
+
+    if (Object.keys(errs).length > 0) 
+      { setErrors(errs); 
+        return; 
+      }
+
+
     // In real app: POST/PUT to API
-    alert(`Test ${mode === "create" ? "created" : "updated"} successfully! (demo)`);
-    router.push("/tests");
+       try {
+
+        const parsedHeaders = headers.reduce((acc, h) => {
+
+          if (h.key.trim()) {
+            acc[h.key] = h.value;
+          }
+
+          return acc;
+
+        }, {} as Record<string, string>);
+
+        const payload = {
+          name,
+          url,
+          method,
+          headers: parsedHeaders,
+
+          body: body ? JSON.parse(body) : {},
+
+          expectedStatusCode,
+          maxResponseTime,
+        };
+
+        await postCreateTest(payload);
+
+        alert(`Test ${mode === "create" ? "created" : "updated"} successfully!`);
+
+        router.push("/dashboard/tests");
+
+      } catch (error) {
+
+        console.error(error);
+
+        alert("Failed to create test.");
+
+      }
+   
   };
+
+
+
 
   const addHeader = () => setHeaders([...headers, { key: "", value: "" }]);
   const removeHeader = (i: number) => setHeaders(headers.filter((_, idx) => idx !== i));
@@ -98,6 +145,7 @@ export default function TestForm({ initialValues, mode }: TestFormProps) {
     next[i][field] = val;
     setHeaders(next);
   };
+
 
   return (
     <div>

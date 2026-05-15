@@ -1,4 +1,5 @@
 import type { ApiTest } from "@/lib/types";
+import type { CreateTestType } from "@/lib/types";
 
 const API_URL = "http://localhost:5199";
 
@@ -35,4 +36,22 @@ export async function getTestsById(id: number): Promise<ApiTest> {
     }
 
     return response.json();
+}
+
+export async function postCreateTest(data: CreateTestType): Promise<ApiTest> {
+
+    const response = await fetch(`${API_URL}/tests/create-tests`, {
+        method: "POST",
+        headers:{
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(data)
+    })
+
+     if (!response.ok) {
+        throw new Error("Failed to create test");
+    }
+
+    return response.json();
+
 }
