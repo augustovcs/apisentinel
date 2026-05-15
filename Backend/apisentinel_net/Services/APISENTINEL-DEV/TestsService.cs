@@ -56,7 +56,7 @@ public class TestsService : ITestsService
 
         return new TestsDTO
         {
-            
+            Id = t.Id,
             Name = t.Name,
             Url = t.Url,
             Method = t.Method,

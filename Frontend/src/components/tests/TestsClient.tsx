@@ -51,19 +51,24 @@ export default function TestsClient() {
         }
       />
 
-      <DataTable<Record<string, unknown>>
+      <DataTable<ApiTest>
         columns={[
           {
             key: "name",
             header: "Name",
-            render: (val, row) => (
+            render: (val, row) => {
+              
+              console.log(row);
+
+              
               <Link
-                href={`/dashboard/tests/${(row as unknown as ApiTest).id}/edit`}
+                href={`/dashboard/tests/${row.id}/edit`}
                 style={{ color: "#0B3D2E", fontWeight: 500, textDecoration: "none" }}
               >
                 {val as string}
               </Link>
-            ),
+            },
+            
           },
           
           {
@@ -128,7 +133,7 @@ export default function TestsClient() {
           },
         ]}
         //tests = dev mockTests = mock view
-        data={tests as unknown as Record<string, unknown>[]}
+        data={tests}
         emptyMessage="No tests configured. Create your first test."
       />
     </div>

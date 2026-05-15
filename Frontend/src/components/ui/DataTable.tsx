@@ -1,21 +1,21 @@
 "use client";
 
 interface Column<T> {
-  key: string;
+  key: keyof T;
   header: string;
   width?: string;
-  render?: (value: unknown, row: T) => React.ReactNode;
+  render?: (value: T[keyof T], row: T) => React.ReactNode;
   align?: "left" | "center" | "right";
 }
 
-interface DataTableProps<T extends Record<string, unknown>> {
+interface DataTableProps<T> {
   columns: Column<T>[];
   data: T[];
   emptyMessage?: string;
   onRowClick?: (row: T) => void;
 }
 
-export default function DataTable<T extends Record<string, unknown>>({
+export default function DataTable<T>({
   columns,
   data,
   emptyMessage = "No data available.",
@@ -35,7 +35,7 @@ export default function DataTable<T extends Record<string, unknown>>({
             <tr style={{ borderBottom: "1px solid #E5E7EB", backgroundColor: "#F9FAFB" }}>
               {columns.map((col) => (
                 <th
-                  key={col.key}
+                  key={String(col.key)}
                   style={{
                     padding: "10px 16px",
                     textAlign: col.align || "left",
@@ -87,7 +87,7 @@ export default function DataTable<T extends Record<string, unknown>>({
                 >
                   {columns.map((col) => (
                     <td
-                      key={col.key}
+                      key={String(col.key)}
                       style={{
                         padding: "11px 16px",
                         textAlign: col.align || "left",
