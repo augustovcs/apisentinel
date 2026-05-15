@@ -18,8 +18,32 @@ public class ProductControlls : ControllerBase
     {
         _clienteService = clienteService;
     }
-    
-    [HttpPost("/criar-product")]
+
+    [HttpPost("/create-product")]
+    public async Task<IActionResult> Create([FromBody] ProductRequestDTO request)
+    {
+        var gerarAlgo = await _clienteService.CreateClient(request);
+
+        return Ok(gerarAlgo);
+    }
+
+    [HttpGet("/get-product")]
+    public async Task<IActionResult> GetAllProducts()
+    {
+        var Products = await _clienteService.GetAllProducts();
+
+        return Ok(Products);
+    }
+
+    [HttpDelete("/delete-produtc/{id}")]
+    public async Task<IActionResult> Delete([FromRoute] int id)
+    {
+        var result = await _clienteService.DeleteProduct(id);
+
+        if (!result) return NotFound("produto não encontrado");
+
+        return Ok("Produto deletado com sucesso");
+    }
 
 
 }
