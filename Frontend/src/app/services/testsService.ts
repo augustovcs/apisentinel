@@ -21,7 +21,7 @@ export async function getTests(): Promise<ApiTest[]> {
 }
 
 export async function getTestsById(id: number): Promise<ApiTest> {
-    console.log("ID:", id);
+    //console.log("ID:", id);
     const response = await fetch(`${API_URL}/tests/${id}`, {
         method: "GET",
         headers: {

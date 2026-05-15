@@ -284,7 +284,7 @@ export default function TestForm({ initialValues, mode }: TestFormProps) {
             borderTop: "1px solid #E5E7EB",
           }}
         >
-          <Button type="button" variant="secondary" onClick={() => router.push("/tests")}>
+          <Button type="button" variant="secondary" onClick={() => router.push("/dashboard/tests")}>
             Cancel
           </Button>
           <Button type="submit" variant="primary">

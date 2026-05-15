@@ -56,9 +56,10 @@ export default function TestsClient() {
           {
             key: "name",
             header: "Name",
-            render: (val, row) => {
-              
-              console.log(row);
+            render: (val, row) => (
+
+            //LOG API
+            //console.log(row);
 
               
               <Link
@@ -67,7 +68,7 @@ export default function TestsClient() {
               >
                 {val as string}
               </Link>
-            },
+            ),
             
           },
           
