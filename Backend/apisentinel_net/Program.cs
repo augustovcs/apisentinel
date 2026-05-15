@@ -6,6 +6,7 @@ using Services.Finance;
 using Microsoft.EntityFrameworkCore;
 using Services.Dev.Tests;
 using Interface.Dev;
+using Product.Services;
 
 //using Microsoft.AspNetCore.Mvc;
 
@@ -71,6 +72,7 @@ builder.Services.AddScoped<Consorcio>();
 builder.Services.AddScoped<ClienteService>();
 builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<ITestsService, TestsService>();
+builder.Services.AddScoped<ProductService>();
 
 
 
