@@ -48,10 +48,15 @@ export async function postCreateTest(data: CreateTestType): Promise<ApiTest> {
         body: JSON.stringify(data)
     })
 
+
+
      if (!response.ok) {
+        console.log(data)
         throw new Error("Failed to create test");
     }
 
+
+   
     return response.json();
 
 }
