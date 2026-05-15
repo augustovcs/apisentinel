@@ -8,6 +8,6 @@ public interface ITestsService
     
     public Task<List<TestsDTO>> GetTestsFull();
     public Task<TestsDTO> GetTestsById(int id);
-
+    public Task<TestsDTO> CreateTest(RequestTestsDTO request);
 
 }

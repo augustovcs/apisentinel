@@ -7,6 +7,8 @@ import { getTests, getTestsById } from "@/app/services/testsService";
 
 export const metadata: Metadata = { title: "Edit Test" };
 
+
+//mock interface
 interface EditTestPageProps {
   params: Promise<{ id: string }>;
 }
@@ -16,6 +18,7 @@ interface Props {
     id: string;
   }>;
 }
+
 
 export default async function EditTestPage({ params }: Props) {
 

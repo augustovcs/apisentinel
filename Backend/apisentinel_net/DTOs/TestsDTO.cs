@@ -2,9 +2,9 @@ using Newtonsoft.Json.Linq;
 
 namespace DTOs.Dev;
 
-    public class TestsDTO
-    {
-        //public long Id { get; set; }
+    public class RequestTestsDTO
+{
+    
         public string Name { get; set; }
         public string Url { get; set; }
         public string Method { get; set; }
@@ -13,7 +13,15 @@ namespace DTOs.Dev;
         public int? ExpectedStatusCode { get; set; }
         public int? MaxResponseTime { get; set; }
         public string? LastStatus { get; set; }
+
+    
+}
+
+    public class TestsDTO : RequestTestsDTO
+    {
+        public long Id { get; set; }
         public DateTime? CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
+        
     }
 

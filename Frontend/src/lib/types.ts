@@ -38,3 +38,13 @@ export interface DashboardStats {
   failedLast24h: number;
   avgResponseTime: number;
 }
+
+export interface CreateTestType {
+    name: string;
+    url: string;
+    method: string;
+    headers: Record<string, string>;
+    body: unknown;
+    expectedStatusCode: number;
+    maxResponseTime: number;
+}

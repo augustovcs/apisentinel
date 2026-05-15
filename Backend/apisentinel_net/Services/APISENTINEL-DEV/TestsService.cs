@@ -26,6 +26,7 @@ public class TestsService : ITestsService
 
         return response.Models.Select(t => new TestsDTO
         {
+            Id = t.Id,
             Name = t.Name,
             Url = t.Url,
             Method = t.Method,
@@ -56,7 +57,7 @@ public class TestsService : ITestsService
 
         return new TestsDTO
         {
-            
+            Id = t.Id,
             Name = t.Name,
             Url = t.Url,
             Method = t.Method,
@@ -70,6 +71,47 @@ public class TestsService : ITestsService
 
         };
     
+    }
+
+
+    public async Task<TestsDTO> CreateTest(RequestTestsDTO request)
+    {
+        
+        var test = new TestsModel()
+        {
+            Name = request.Name,
+            Url = request.Url,
+            Method = request.Method,
+            Headers = request.Headers,
+            Body = request.Body,
+            ExpectedStatusCode = request.ExpectedStatusCode,
+            MaxResponseTime = request.MaxResponseTime,
+            LastStatus = request?.LastStatus ?? "PENDING"
+        };
+
+        var response = await _supabase
+        .From<TestsModel>()
+        .Insert(test);
+
+        var insertedTest = response.Model;
+
+        return new TestsDTO
+        {
+            Id = insertedTest.Id,
+            Name = request.Name,
+            Url = request.Url,
+            Method = request.Method,
+            Headers = request.Headers,
+            Body = request.Body,
+            ExpectedStatusCode = request.ExpectedStatusCode,
+            MaxResponseTime = request.MaxResponseTime,
+            LastStatus = request?.LastStatus ?? "PENDING"
+
+        };
+        
+
+
+
     }
 
     

@@ -24,7 +24,8 @@ public class TestsController : ControllerBase
     public async Task<IActionResult> CreateTest([FromBody]TestsDTO request)
     {
 
-        throw new NotImplementedException();
+        var get = await _testsService.CreateTest(request);
+        return Ok(get);
         
     }
 

@@ -7,7 +7,7 @@ namespace Models.Dev
     [Table("tests")]
     public class TestsModel : BaseModel
     {
-        [PrimaryKey("id")]
+        [PrimaryKey("id", false)]
         public long Id { get; set; }
 
         [Column("name")]
