@@ -40,7 +40,6 @@ export async function getTestsById(id: number): Promise<ApiTest> {
 
 export async function postCreateTest(data: CreateTestType): Promise<ApiTest> {
 
-
     const cleanHeaders = Object.fromEntries(
     Object.entries(data.headers ?? {}).map(([key, value]) => [
       key.replace(/^"+|"+$/g, ""),
@@ -49,7 +48,6 @@ export async function postCreateTest(data: CreateTestType): Promise<ApiTest> {
         : String(value),
     ])
   );
-
     const response = await fetch(`${API_URL}/tests/create-tests`, {
         method: "POST",
         headers:{
@@ -57,23 +55,46 @@ export async function postCreateTest(data: CreateTestType): Promise<ApiTest> {
             ...cleanHeaders
             
         },
-
-        
         body: JSON.stringify({
             ...data,
             headers: cleanHeaders,
         }),
     });
 
-
-
      if (!response.ok) {
         console.log(await response.text())
         throw new Error("Failed to create test");
     }
 
-
-   
     return response.json();
+}
 
+export async function patchUpdateTest(id: number, data: CreateTestType) : Promise<ApiTest> {
+
+    const cleanHeaders = Object.fromEntries(
+    Object.entries(data.headers ?? {}).map(([key, value]) => [
+      key.replace(/^"+|"+$/g, ""),
+      typeof value === "string"
+        ? value.replace(/^"+|"+$/g, "")
+        : String(value),
+    ]))
+
+
+    const response = await fetch(`${API_URL}/tests/update/${id}`, {
+        method: "PATCH",
+        headers:{
+            "Content-Type": "application/json",
+            
+        },
+        body: JSON.stringify({
+            ...data,
+            headers: cleanHeaders,
+        }), 
+    });
+    if (!response.ok) {
+        console.log(await response.text())
+        throw new Error("Failed to update test");
+    }
+
+    return response.json();
 }

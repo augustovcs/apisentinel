@@ -8,7 +8,7 @@ export interface Header {
 }
 
 export interface ApiTest {
-  id: string;
+  id: number;
   name: string;
   url: string;
   method: HttpMethod;

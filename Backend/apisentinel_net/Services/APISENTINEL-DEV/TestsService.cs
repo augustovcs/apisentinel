@@ -87,7 +87,9 @@ public class TestsService : ITestsService
             Body = request.Body.ToDictionary(x => x.Key, x => JsonHelper.Normalize(x.Value)),
             ExpectedStatusCode = request.ExpectedStatusCode,
             MaxResponseTime = request.MaxResponseTime,
-            LastStatus = request?.LastStatus ?? "PENDING"
+            LastStatus = request?.LastStatus ?? "PENDING",
+            CreatedAt = DateTime.UtcNow
+
         };
 
         var response = await _supabase
@@ -106,7 +108,8 @@ public class TestsService : ITestsService
             Body = request.Body.ToDictionary(x => x.Key, x => JsonHelper.Normalize(x.Value)),
             ExpectedStatusCode = request.ExpectedStatusCode,
             MaxResponseTime = request.MaxResponseTime,
-            LastStatus = request?.LastStatus ?? "PENDING"
+            LastStatus = request?.LastStatus ?? "PENDING",
+            CreatedAt = DateTime.UtcNow
 
         };
         
@@ -155,7 +158,11 @@ public class TestsService : ITestsService
                     x => x.Key,
                     x => JsonHelper.Normalize(x.Value)
                 )
-                : finalResponse.Body
+                : finalResponse.Body,
+
+            UpdatedAt =  DateTime.UtcNow
+
+            
         };
 
         
@@ -179,7 +186,9 @@ public class TestsService : ITestsService
             Body = request.Body, //.ToDictionary(x => x.Key, x => JsonHelper.Normalize(x.Value) ?? new Dictionary<string, object>()),
             ExpectedStatusCode = request.ExpectedStatusCode,
             MaxResponseTime = request.MaxResponseTime,
-            LastStatus = request?.LastStatus ?? "PENDING"
+            LastStatus = request?.LastStatus ?? "PENDING",
+            CreatedAt = finalResponse.CreatedAt,
+            UpdatedAt = insertedTest.UpdatedAt
 
         };
 

@@ -32,6 +32,7 @@ export default async function EditTestPage({ params }: Props) {
     <TestForm
       mode="edit"
       initialValues={{
+        id: test.id,
         name: test.name,
         url: test.url,
         method: test.method,
