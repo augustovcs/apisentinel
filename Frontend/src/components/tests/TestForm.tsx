@@ -122,7 +122,8 @@ export default function TestForm({ initialValues, mode }: TestFormProps) {
         await postCreateTest(payload);
 
         alert(`Test ${mode === "create" ? "created" : "updated"} successfully!`);
-
+        console.log(parsedHeaders);
+        
         router.push("/dashboard/tests");
 
       } catch (error) {
