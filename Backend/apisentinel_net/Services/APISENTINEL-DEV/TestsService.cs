@@ -130,6 +130,7 @@ public class TestsService : ITestsService
             .Get();
 
         var finalResponse = existingResponse.Models.FirstOrDefault();
+        Console.WriteLine(finalResponse.CreatedAt);
         if (finalResponse == null)
         {
             throw new Exception("Test not found");
@@ -167,10 +168,19 @@ public class TestsService : ITestsService
 
         
 
-        var response = await _supabase
+       var response = await _supabase
         .From<TestsModel>()
         .Where(x => x.Id == request.Id)
-        .Update(updated);
+        .Set(x => x.Name, request.Name ?? finalResponse.Name)
+        .Set(x => x.Url, request.Url ?? finalResponse.Url)
+        .Set(x => x.Method, request.Method ?? finalResponse.Method)
+        .Set(x => x.ExpectedStatusCode, request.ExpectedStatusCode ?? finalResponse.ExpectedStatusCode)
+        .Set(x => x.MaxResponseTime, request.MaxResponseTime ?? finalResponse.MaxResponseTime)
+        .Set(x => x.LastStatus, request.LastStatus ?? finalResponse.LastStatus)
+        .Set(x => x.Headers, request.Headers ?? finalResponse.Headers)
+        .Set(x => x.Body, request.Body ?? finalResponse.Body)
+        .Set(x => x.UpdatedAt, DateTime.UtcNow)
+        .Update();
 
         var insertedTest = response.Models.FirstOrDefault();
 
@@ -188,7 +198,7 @@ public class TestsService : ITestsService
             MaxResponseTime = request.MaxResponseTime,
             LastStatus = request?.LastStatus ?? "PENDING",
             CreatedAt = finalResponse.CreatedAt,
-            UpdatedAt = request.UpdatedAt
+            UpdatedAt = updated.UpdatedAt
 
         };
 
