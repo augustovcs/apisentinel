@@ -5,12 +5,13 @@ import { useRouter } from "next/navigation";
 import Button from "@/components/ui/Button";
 import PageHeader from "@/components/ui/PageHeader";
 import type { HttpMethod, Header } from "@/lib/types";
-import { postCreateTest } from "@/app/services/testsService";
+import { patchUpdateTest, postCreateTest } from "@/app/services/testsService";
 
 const HTTP_METHODS: HttpMethod[] = ["GET", "POST", "PUT", "PATCH", "DELETE", "HEAD", "OPTIONS"];
 
 interface TestFormProps {
   initialValues?: {
+    id: number,
     name: string;
     url: string;
     method: HttpMethod;
@@ -63,7 +64,7 @@ const fieldRowStyle: React.CSSProperties = {
 export default function TestForm({ initialValues, mode }: TestFormProps) {
   const router = useRouter();
   const init = initialValues ?? DEFAULT_VALUES;
-
+  const id = initialValues?.id;
   const [name, setName] = useState(init.name);
   const [url, setUrl] = useState(init.url);
   const [method, setMethod] = useState<HttpMethod>(init.method);
@@ -118,11 +119,24 @@ export default function TestForm({ initialValues, mode }: TestFormProps) {
           expectedStatusCode,
           maxResponseTime,
         };
+        
+      console.log("initialValues:", initialValues);
+      console.log("id:", initialValues?.id);
 
-        await postCreateTest(payload);
+        if (mode === "edit" && !id) {
+         throw new Error("Missing id for update");
+            }
+
+        if (mode === "create") {
+          await postCreateTest(payload);
+        }
+        else {
+          await patchUpdateTest(id!, payload);
+        }
 
         alert(`Test ${mode === "create" ? "created" : "updated"} successfully!`);
-
+        console.log(parsedHeaders);
+        
         router.push("/dashboard/tests");
 
       } catch (error) {
@@ -336,7 +350,7 @@ export default function TestForm({ initialValues, mode }: TestFormProps) {
             Cancel
           </Button>
           <Button type="submit" variant="primary">
-            {mode === "create" ? "Create Test" : "Save Changes"}
+            {mode === "create" ? "Create Test" : mode === "edit" ? "Save Changes" : ""}
           </Button>
         </div>
       </form>

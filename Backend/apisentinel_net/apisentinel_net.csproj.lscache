@@ -89,7 +89,9 @@ Services/
  TestFinanceService.cs
  TestLocalServerService.cs
  TestMessageService.cs
-Specials/DBTESTCLASS.cs
+Specials/
+ DBTESTCLASS.cs
+ JsonHelperDTOClass.cs
 
 [metadataReferences]
 <DOTNET>/packs/Microsoft.AspNetCore.App.Ref/8.0.25/ref/net8.0/

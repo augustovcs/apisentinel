@@ -29,6 +29,17 @@ public class TestsController : ControllerBase
         
     }
 
+    //PATCH METHODS 
+    [HttpPatch("update/{id}")]
+    public async Task<IActionResult> UpdateTest(int id, [FromBody]RequestUpdateTestsDTO requests)
+    {
+        requests.Id = id;
+
+        var get = await _testsService.PatchUpdateTest(requests);
+        return Ok(get);
+    }
+
+
 
     // GET METHODS //
     
