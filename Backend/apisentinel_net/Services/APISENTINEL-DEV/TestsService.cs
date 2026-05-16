@@ -112,27 +112,62 @@ public class TestsService : ITestsService
         
     }
 
-    public async Task<TestsDTO> PatchUpdateTest(TestsDTO request)
+    public async Task<TestsDTO> PatchUpdateTest(RequestUpdateTestsDTO request)
     {
-             
-        var test = new TestsModel()
+
+         if (request == null)
+         throw new Exception("request is null");
+            
+
+
+        //search
+        var existingResponse = await _supabase
+            .From<TestsModel>()
+            .Where(x => x.Id == request.Id)
+            .Get();
+
+        var finalResponse = existingResponse.Models.FirstOrDefault();
+        if (finalResponse == null)
         {
-            Name = request.Name,
-            Url = request.Url,
-            Method = request.Method,
-            Headers = request.Headers.ToDictionary(x => x.Key, x => JsonHelper.Normalize(x.Value)),
-            Body = request.Body.ToDictionary(x => x.Key, x => JsonHelper.Normalize(x.Value)),
-            ExpectedStatusCode = request.ExpectedStatusCode,
-            MaxResponseTime = request.MaxResponseTime,
-            LastStatus = request?.LastStatus ?? "PENDING"
+            throw new Exception("Test not found");
+        }
+
+        var updated = new TestsModel
+        {
+            Id = finalResponse.Id,
+            Name = request.Name ?? finalResponse.Name,
+            Url = request.Url ?? finalResponse.Url,
+            Method = request.Method ?? finalResponse.Method,
+            ExpectedStatusCode = request.ExpectedStatusCode ?? finalResponse.ExpectedStatusCode,
+            MaxResponseTime = request.MaxResponseTime ?? finalResponse.MaxResponseTime,
+            LastStatus = request.LastStatus ?? finalResponse.LastStatus,
+
+            // headers e body
+            Headers = request.Headers != null
+                ? request.Headers.ToDictionary(
+                    x => x.Key,
+                    x => JsonHelper.Normalize(x.Value)
+                )
+                : finalResponse.Headers,
+
+            Body = request.Body != null
+                ? request.Body.ToDictionary(
+                    x => x.Key,
+                    x => JsonHelper.Normalize(x.Value)
+                )
+                : finalResponse.Body
         };
+
+        
 
         var response = await _supabase
         .From<TestsModel>()
         .Where(x => x.Id == request.Id)
-        .Update(test);
+        .Update(updated);
 
         var insertedTest = response.Model;
+
+     
 
         return new TestsDTO
         {
@@ -140,8 +175,8 @@ public class TestsService : ITestsService
             Name = request.Name,
             Url = request.Url,
             Method = request.Method,
-            Headers = request.Headers.ToDictionary(x => x.Key, x => JsonHelper.Normalize(x.Value)),
-            Body = request.Body.ToDictionary(x => x.Key, x => JsonHelper.Normalize(x.Value)),
+            Headers = request.Headers, //.ToDictionary(x => x.Key, x => JsonHelper.Normalize(x.Value) ?? new Dictionary<string, object>()),
+            Body = request.Body, //.ToDictionary(x => x.Key, x => JsonHelper.Normalize(x.Value) ?? new Dictionary<string, object>()),
             ExpectedStatusCode = request.ExpectedStatusCode,
             MaxResponseTime = request.MaxResponseTime,
             LastStatus = request?.LastStatus ?? "PENDING"
