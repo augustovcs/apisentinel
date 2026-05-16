@@ -1,6 +1,5 @@
 import type { ApiTest } from "@/lib/types";
 import type { CreateTestType } from "@/lib/types";
-import { headers } from "next/headers";
 
 const API_URL = "http://localhost:5199";
 
