@@ -1,6 +1,7 @@
 using Supabase.Postgrest.Attributes;
 using Supabase.Postgrest.Models;
 using Newtonsoft.Json.Linq;
+using DTOs.Dev;
 
 namespace Models.Dev
 {
