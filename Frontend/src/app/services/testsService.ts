@@ -91,6 +91,7 @@ export async function patchUpdateTest(id: number, data: CreateTestType) : Promis
             headers: cleanHeaders,
         }), 
     });
+    console.log("PATCH RESPONSE", data);
     if (!response.ok) {
         console.log(await response.text())
         throw new Error("Failed to update test");

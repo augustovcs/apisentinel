@@ -28,6 +28,10 @@ public class RequestTestsDTO
 public class RequestUpdateTestsDTO : RequestTestsDTO 
 {
     public long Id;
+    public DateTime? CreatedAt { get; set; }
+    public DateTime? UpdatedAt { get; set; }
+    
+    
     
 }
 

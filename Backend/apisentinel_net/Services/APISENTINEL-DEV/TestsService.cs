@@ -172,7 +172,7 @@ public class TestsService : ITestsService
         .Where(x => x.Id == request.Id)
         .Update(updated);
 
-        var insertedTest = response.Model;
+        var insertedTest = response.Models.FirstOrDefault();
 
      
 
@@ -188,7 +188,7 @@ public class TestsService : ITestsService
             MaxResponseTime = request.MaxResponseTime,
             LastStatus = request?.LastStatus ?? "PENDING",
             CreatedAt = finalResponse.CreatedAt,
-            UpdatedAt = insertedTest.UpdatedAt
+            UpdatedAt = request.UpdatedAt
 
         };
 
