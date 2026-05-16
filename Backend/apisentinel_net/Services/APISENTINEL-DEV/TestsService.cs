@@ -103,7 +103,7 @@ public class TestsService : ITestsService
             Url = request.Url,
             Method = request.Method,
             Headers = request.Headers,
-            Body = request.Body,
+            Body = request.Body.ToDictionary(x => x.Key, x => JsonHelper.Normalize(x.Value)),
             ExpectedStatusCode = request.ExpectedStatusCode,
             MaxResponseTime = request.MaxResponseTime,
             LastStatus = request?.LastStatus ?? "PENDING"
