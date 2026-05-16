@@ -110,10 +110,46 @@ public class TestsService : ITestsService
 
         };
         
+    }
 
+    public async Task<TestsDTO> PatchUpdateTest(TestsDTO request)
+    {
+             
+        var test = new TestsModel()
+        {
+            Name = request.Name,
+            Url = request.Url,
+            Method = request.Method,
+            Headers = request.Headers.ToDictionary(x => x.Key, x => JsonHelper.Normalize(x.Value)),
+            Body = request.Body.ToDictionary(x => x.Key, x => JsonHelper.Normalize(x.Value)),
+            ExpectedStatusCode = request.ExpectedStatusCode,
+            MaxResponseTime = request.MaxResponseTime,
+            LastStatus = request?.LastStatus ?? "PENDING"
+        };
 
+        var response = await _supabase
+        .From<TestsModel>()
+        .Where(x => x.Id == request.Id)
+        .Update(test);
+
+        var insertedTest = response.Model;
+
+        return new TestsDTO
+        {
+            Id = insertedTest.Id,
+            Name = request.Name,
+            Url = request.Url,
+            Method = request.Method,
+            Headers = request.Headers.ToDictionary(x => x.Key, x => JsonHelper.Normalize(x.Value)),
+            Body = request.Body.ToDictionary(x => x.Key, x => JsonHelper.Normalize(x.Value)),
+            ExpectedStatusCode = request.ExpectedStatusCode,
+            MaxResponseTime = request.MaxResponseTime,
+            LastStatus = request?.LastStatus ?? "PENDING"
+
+        };
 
     }
+
 
     
 
