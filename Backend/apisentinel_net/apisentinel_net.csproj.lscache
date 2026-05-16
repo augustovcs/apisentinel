@@ -91,7 +91,7 @@ Services/
  TestMessageService.cs
 Specials/
  DBTESTCLASS.cs
- JsonTreatmentClass.cs
+ JsonHelperDTOClass.cs
 
 [metadataReferences]
 <DOTNET>/packs/Microsoft.AspNetCore.App.Ref/8.0.25/ref/net8.0/
