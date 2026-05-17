@@ -10,5 +10,6 @@ public interface ITestsService
     public Task<TestsDTO> GetTestsById(int id);
     public Task<TestsDTO> CreateTest(RequestTestsDTO request);
     public Task<TestsDTO> PatchUpdateTest(RequestUpdateTestsDTO request);
+    public Task<bool> DeleteTaskById(int id);
 
 }
