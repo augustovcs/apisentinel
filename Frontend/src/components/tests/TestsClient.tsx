@@ -8,9 +8,9 @@ import StatusBadge from "@/components/ui/StatusBadge";
 import MethodBadge from "@/components/ui/MethodBadge";
 import Button from "@/components/ui/Button";
 import PageHeader from "@/components/ui/PageHeader";
-import { getTests } from "@/app/services/testsService";
+import { deleteTests, getTests } from "@/app/services/testsService";
 import type { ApiTest } from "@/lib/types";
-import { useQuery } from "@tanstack/react-query";
+import {QueryClient, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 export default function TestsClient() {
   const {
@@ -24,6 +24,19 @@ export default function TestsClient() {
     // 1 minutos sem refetch
     staleTime: 1000 * 60 * 1,
   });
+
+  const queryClient = useQueryClient();
+
+
+  const deleteMutation = useMutation({
+    mutationFn: deleteTests,
+    onSuccess: () =>  {
+      queryClient.invalidateQueries({
+        queryKey: ["tests"]
+      })
+
+    }
+  })
 
   if (isLoading) {
     return <div>Loading tests...</div>;
@@ -130,7 +143,7 @@ export default function TestsClient() {
             key: "id",
             header: "Actions",
             width: "170px",
-            render: (val) => <ActionButtons id={val as string} />,
+            render: (val) => <ActionButtons id={val as number} onDelete={() => deleteMutation.mutate(Number(val))}/>,
           },
         ]}
         //tests = dev mockTests = mock view
@@ -141,14 +154,14 @@ export default function TestsClient() {
   );
 }
 
-function ActionButtons({ id }: { id: string }) {
+function ActionButtons({ id, onDelete, }: { id: number, onDelete: () => void; }) {
   return (
     <div style={{ display: "flex", gap: "6px" }}>
       <Link href={`/dashboard/tests/${id}/edit`} style={{ textDecoration: "none" }}>
         <ActionBtn color="#374151" borderColor="#D1D5DB" hoverBg="#F3F4F6">Edit</ActionBtn>
       </Link>
       <ActionBtn color="#27AE60" borderColor="#27AE60" hoverBg="#F0FDF4">Run</ActionBtn>
-      <ActionBtn color="#DC2626" borderColor="#FCA5A5" hoverBg="#FEF2F2">Delete</ActionBtn>
+      <ActionBtn color="#DC2626" borderColor="#FCA5A5" hoverBg="#FEF2F2" onClick={onDelete}>Delete</ActionBtn>
     </div>
   );
 }

@@ -201,7 +201,7 @@ export default function ExecutionsPage() {
                     : "#166534",
                 }}
               >
-                {val ?? "—"}
+                
               </span>
             ),
           },

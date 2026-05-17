@@ -68,4 +68,23 @@ public class TestsController : ControllerBase
         }
     
     }
+
+
+    [HttpDelete("delete/{id}")]
+    public async Task<IActionResult> DeleteTestById (int id)
+    {
+        try
+        {
+            
+            var get = await _testsService.DeleteTaskById(id);
+            return Ok(get);
+
+        }
+
+        catch(Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
+
 }
