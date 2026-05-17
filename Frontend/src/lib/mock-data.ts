@@ -2,7 +2,7 @@ import type { ApiTest, Execution, DashboardStats } from "./types";
 
 export const mockTests: ApiTest[] = [
   {
-    id: "t1",
+    id: 1,
     name: "Auth - Login Endpoint",
     url: "https://api.example.com/v1/auth/login",
     method: "POST",
@@ -15,7 +15,7 @@ export const mockTests: ApiTest[] = [
     updatedAt: "2026-04-14T09:00:00Z",
   },
   {
-    id: "t2",
+    id: 2,
     name: "Users - List All",
     url: "https://api.example.com/v1/users",
     method: "GET",
@@ -28,7 +28,7 @@ export const mockTests: ApiTest[] = [
     updatedAt: "2026-04-14T09:05:00Z",
   },
   {
-    id: "t3",
+    id: 3,
     name: "Orders - Create Order",
     url: "https://api.example.com/v1/orders",
     method: "POST",
@@ -44,7 +44,7 @@ export const mockTests: ApiTest[] = [
     updatedAt: "2026-04-14T10:00:00Z",
   },
   {
-    id: "t4",
+    id: 4,
     name: "Products - Get by ID",
     url: "https://api.example.com/v1/products/:id",
     method: "GET",
@@ -57,7 +57,7 @@ export const mockTests: ApiTest[] = [
     updatedAt: "2026-04-14T11:00:00Z",
   },
   {
-    id: "t5",
+    id: 5,
     name: "Health Check",
     url: "https://api.example.com/health",
     method: "GET",
@@ -70,7 +70,7 @@ export const mockTests: ApiTest[] = [
     updatedAt: "2026-04-14T07:00:00Z",
   },
   {
-    id: "t6",
+    id: 6,
     name: "Payments - Process",
     url: "https://api.example.com/v1/payments",
     method: "POST",
