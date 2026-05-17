@@ -99,3 +99,14 @@ export async function patchUpdateTest(id: number, data: CreateTestType) : Promis
 
     return response.json();
 }
+
+export async function deleteTests(id: number): Promise<void> {
+    const response = await fetch(`${API_URL}/tests/delete/${id}`, {
+        method: "DELETE",
+    });
+
+    if (!response.ok) {
+        throw new Error(`Failed to delete the test ${id}`)
+    }
+
+}
