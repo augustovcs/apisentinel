@@ -1,6 +1,14 @@
-namespace apisentinel_net.Interface;
+using General.DTOs;
 
-public class IGeneralConfigsService
+namespace Interface.general;
+
+public interface IGeneralConfigsService
 {
-    
+    Task<GeneralConfigsDTO> GetConfigsAsync();
+
+    Task<GeneralConfigsDTO> UpdateConfigsAsync(
+        RequestGeneralConfigsDTO proprietes
+    );
+
+    Task<string> RegenerateApiKey();
 }

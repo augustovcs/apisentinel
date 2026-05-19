@@ -1,4 +1,4 @@
-namespace apisentinel_net.DTOs;
+namespace General.DTOs;
 
 public class RequestGeneralConfigsDTO
 {
