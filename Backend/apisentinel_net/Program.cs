@@ -7,6 +7,9 @@ using Microsoft.EntityFrameworkCore;
 using Services.Dev.Tests;
 using Interface.Dev;
 using Product.Services;
+using Interface.key;
+using Services.GeneralConfigs;
+using Interface.general;
 
 //using Microsoft.AspNetCore.Mvc;
 
@@ -73,6 +76,10 @@ builder.Services.AddScoped<ClienteService>();
 builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<ITestsService, TestsService>();
 builder.Services.AddScoped<ProductService>();
+builder.Services.AddScoped<IApiKeyGeneratorService, ApiKeyGeneratorService>();
+builder.Services.AddScoped<IGeneralConfigsService, IGeneralConfigsService>();
+
+
 
 
 
