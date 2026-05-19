@@ -7,7 +7,7 @@ namespace Models;
 
 public class GeneralConfigsModel : BaseModel
 {
-    [PrimaryKey("Id")]
+    [PrimaryKey("id")]
     public int Id { get; set; }
     
     [Column("plataforme_name")]
