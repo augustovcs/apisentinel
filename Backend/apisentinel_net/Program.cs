@@ -10,6 +10,7 @@ using Product.Services;
 using Interface.key;
 using Services.GeneralConfigs;
 using Interface.general;
+using apisentinel_net.Services;
 
 //using Microsoft.AspNetCore.Mvc;
 
@@ -77,7 +78,7 @@ builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<ITestsService, TestsService>();
 builder.Services.AddScoped<ProductService>();
 builder.Services.AddScoped<IApiKeyGeneratorService, ApiKeyGeneratorService>();
-builder.Services.AddScoped<IGeneralConfigsService, IGeneralConfigsService>();
+builder.Services.AddScoped<IGeneralConfigsService, GeneralConfigsService>();
 
 
 
