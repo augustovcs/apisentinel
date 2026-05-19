@@ -79,7 +79,6 @@ export async function patchUpdateTest(id: number, data: CreateTestType) : Promis
         : String(value),
     ]))
 
-
     const response = await fetch(`${API_URL}/tests/update/${id}`, {
         method: "PATCH",
         headers:{

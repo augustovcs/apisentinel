@@ -130,6 +130,7 @@ public class TestsService : ITestsService
             .Get();
 
         var finalResponse = existingResponse.Models.FirstOrDefault();
+        
         Console.WriteLine(finalResponse.CreatedAt);
         if (finalResponse == null)
         {
