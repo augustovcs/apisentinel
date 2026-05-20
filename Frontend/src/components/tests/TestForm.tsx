@@ -79,7 +79,7 @@ export default function TestForm({ initialValues, mode }: TestFormProps) {
     if (!name.trim()) e.name = "Name is required.";
     if (!url.trim()) e.url = "URL is required.";
     else if (!/^https?:\/\/.+/.test(url.trim())) e.url = "Must be a valid HTTP/HTTPS URL.";
-    if (expectedStatusCode < 100 || expectedStatusCode > 599) e.expectedStatusCode = "Must be between 100–599.";
+    if (expectedStatusCode < 100 || expectedStatusCode > 599) e.expectedStatusCode = "Must be between 100-599.";
     if (maxResponseTime < 1) e.maxResponseTime = "Must be ≥ 1ms.";
     return e;
   };
