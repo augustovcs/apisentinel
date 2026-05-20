@@ -10,8 +10,8 @@ public class GeneralConfigsModel : BaseModel
     [PrimaryKey("id")]
     public int Id { get; set; }
     
-    [Column("plataforme_name")]
-    public string plataform_name { get; set; }
+    [Column("platform_name")]
+    public string platform_name { get; set; }
     
     [Column("default_timeout")]
     public int default_timeout { get; set; }

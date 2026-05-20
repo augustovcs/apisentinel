@@ -37,7 +37,7 @@ public class GeneralConfigsService : IGeneralConfigsService
         return new GeneralConfigsDTO
         {
             Id = response.Id,
-            plataform_name = response.plataform_name,
+            plataform_name = response.platform_name,
             default_timeout = response.default_timeout,
             timezone = response.timezone,
             alert_email = response.alert_email,
@@ -65,7 +65,7 @@ public class GeneralConfigsService : IGeneralConfigsService
         if (!string.IsNullOrWhiteSpace(
                 proprietes.plataform_name))
         {
-            config.plataform_name =
+            config.platform_name =
                 proprietes.plataform_name;
         }
 
@@ -73,19 +73,31 @@ public class GeneralConfigsService : IGeneralConfigsService
         {
             TimeZoneInfo? tz = null;
 
-            // Tenta IANA (Linux/macOS) e Windows ID
-            try { tz = TimeZoneInfo.FindSystemTimeZoneById(proprietes.timezone); }
+            try
+            {
+                tz = TimeZoneInfo.FindSystemTimeZoneById(proprietes.timezone);
+            }
             catch (TimeZoneNotFoundException)
             {
-                // Tenta converter Windows → IANA ou vice-versa (.NET 6+)
-                if (!TimeZoneInfo.TryConvertWindowsIdToIanaId(proprietes.timezone, out var ianaId) ||
-                    !TimeZoneInfo.TryFindSystemTimeZoneById(ianaId, out tz))
+                // Tenta Windows → IANA
+                if (TimeZoneInfo.TryConvertWindowsIdToIanaId(proprietes.timezone, out var ianaId))
                 {
-                    throw new Exception("timezone inválida");
+                    try { tz = TimeZoneInfo.FindSystemTimeZoneById(ianaId); }
+                    catch { /* continua */ }
                 }
+
+                // Tenta IANA → Windows
+                if (tz == null && TimeZoneInfo.TryConvertIanaIdToWindowsId(proprietes.timezone, out var winId))
+                {
+                    try { tz = TimeZoneInfo.FindSystemTimeZoneById(winId); }
+                    catch { /* continua */ }
+                }
+
+                if (tz == null)
+                    throw new Exception("timezone inválida");
             }
 
-            config.timezone = tz.Id; // salva o ID já validado
+            config.timezone = tz.Id;
         }
             
         
@@ -152,7 +164,7 @@ public class GeneralConfigsService : IGeneralConfigsService
         return new GeneralConfigsDTO
         {
             Id = config.Id,
-            plataform_name = config.plataform_name,
+            plataform_name = config.platform_name,
             default_timeout = config.default_timeout,
             timezone = config.timezone,
             alert_email = config.alert_email,
