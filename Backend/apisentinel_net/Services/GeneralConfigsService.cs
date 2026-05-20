@@ -69,25 +69,26 @@ public class GeneralConfigsService : IGeneralConfigsService
                 proprietes.plataform_name;
         }
 
-        // timezone
-        if (!string.IsNullOrWhiteSpace(
-                proprietes.timezone))
+        if (!string.IsNullOrWhiteSpace(proprietes.timezone))
         {
-            try
-            {
-                TimeZoneInfo.FindSystemTimeZoneById(
-                    proprietes.timezone
-                );
+            TimeZoneInfo? tz = null;
 
-                config.timezone = proprietes.timezone;
-            }
-            catch
+            // Tenta IANA (Linux/macOS) e Windows ID
+            try { tz = TimeZoneInfo.FindSystemTimeZoneById(proprietes.timezone); }
+            catch (TimeZoneNotFoundException)
             {
-                throw new Exception(
-                    "timezone inválida"
-                );
+                // Tenta converter Windows → IANA ou vice-versa (.NET 6+)
+                if (!TimeZoneInfo.TryConvertWindowsIdToIanaId(proprietes.timezone, out var ianaId) ||
+                    !TimeZoneInfo.TryFindSystemTimeZoneById(ianaId, out tz))
+                {
+                    throw new Exception("timezone inválida");
+                }
             }
+
+            config.timezone = tz.Id; // salva o ID já validado
         }
+            
+        
 
         // timeout
         if (proprietes.default_timeout.HasValue)
