@@ -35,27 +35,25 @@ public class GeneralConfigsController : ControllerBase
         }
     }
 
-    [HttpPatch]
+    [HttpPatch("update/{id}")]
     public async Task<IActionResult> UpdateConfigs(
-        [FromBody]
-        RequestGeneralConfigsDTO request)
+        int id,
+        [FromBody] RequestGeneralConfigsDTO requests)
     {
-        try
-        {
-            var result =
-                await _service.UpdateConfigsAsync(
-                    request
-                );
-
-            return Ok(result);
-        }
-        catch (Exception ex)
+        if (id != 1)
         {
             return BadRequest(new
             {
-                message = ex.Message
+                message = "apenas o id 1 é permitido"
             });
         }
+
+        var get =
+            await _service.UpdateConfigsAsync(
+                requests
+            );
+
+        return Ok(get);
     }
 
     [HttpPost("regenerate-api-key")]
