@@ -43,7 +43,7 @@ public class PagesRequest : IPagesRequest
         var successCount = tests.Count(t => string.Equals(t.LastStatus, "success", StringComparison.OrdinalIgnoreCase));
         var failedCount = tests.Count(t => string.Equals(t.LastStatus, "failed", StringComparison.OrdinalIgnoreCase));
         var successRate = totalTests > 0 ? (int)Math.Round((double)successCount / totalTests * 100) : 0;
-        var avgResponseTime = totalTests > 0 ? (int)Math.Round(tests.Average(t => (double?)(t.MaxResponseTime ?? 0))) : 0;
+        var avgResponseTime = totalTests > 0 ? (int)Math.Round(tests.Average(t => (decimal)(t.MaxResponseTime ?? 0))) : 0;
 
         var recentExecutions = executions
             .OrderByDescending(e => e.ExecutedAt ?? DateTime.MinValue)
