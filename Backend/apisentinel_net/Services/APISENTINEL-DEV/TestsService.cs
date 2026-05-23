@@ -87,7 +87,7 @@ public class TestsService : ITestsService
             Body = request.Body.ToDictionary(x => x.Key, x => JsonHelper.Normalize(x.Value)),
             ExpectedStatusCode = request.ExpectedStatusCode,
             MaxResponseTime = request.MaxResponseTime,
-            LastStatus = request?.LastStatus ?? "PENDING",
+            LastStatus = request?.LastStatus ?? "UNKNOWN FROM FRONTEND",
             CreatedAt = DateTime.UtcNow
 
         };
@@ -108,7 +108,7 @@ public class TestsService : ITestsService
             Body = request.Body.ToDictionary(x => x.Key, x => JsonHelper.Normalize(x.Value)),
             ExpectedStatusCode = request.ExpectedStatusCode,
             MaxResponseTime = request.MaxResponseTime,
-            LastStatus = request?.LastStatus ?? "PENDING",
+            LastStatus = request?.LastStatus ?? "UNKNOWN FROM FRONTEND",
             CreatedAt = DateTime.UtcNow
 
         };
@@ -197,7 +197,7 @@ public class TestsService : ITestsService
             Body = request.Body, //.ToDictionary(x => x.Key, x => JsonHelper.Normalize(x.Value) ?? new Dictionary<string, object>()),
             ExpectedStatusCode = request.ExpectedStatusCode,
             MaxResponseTime = request.MaxResponseTime,
-            LastStatus = request?.LastStatus ?? "PENDING",
+            LastStatus = request?.LastStatus ?? "UNKNOWN FROM FRONTEND",
             CreatedAt = finalResponse.CreatedAt,
             UpdatedAt = updated.UpdatedAt
 
