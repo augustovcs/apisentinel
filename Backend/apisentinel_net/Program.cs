@@ -11,21 +11,40 @@ using Interface.key;
 using Services.GeneralConfigs;
 using Interface.general;
 using apisentinel_net.Services;
-
-//using Microsoft.AspNetCore.Mvc;
-
+using Microsoft.OpenApi.Models;
+using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+
+// ─── Swagger config ───────────────────────────────────────────
+builder.Services.AddSwaggerGen(options =>
+{
+    options.SwaggerDoc("v1", new OpenApiInfo
+    {
+        Title       = "API Sentinel - Backend API",
+        Description = "Sistema de monitoramento e automação de APIs",
+        Version     = "v1"
+    });
+
+    var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
+
+    options.TagActionsBy(api =>
+    {
+        var tag = api.ActionDescriptor.EndpointMetadata
+            .OfType<TagsAttribute>()
+            .FirstOrDefault()?.Tags.FirstOrDefault();
+
+        return tag != null ? new[] { tag } : new[] { api.GroupName ?? "General" };
+    });
+});
+// ──────────────────────────────────────────────────────────────
 
 builder.Services.AddControllers();
 
-
-//CORS
+// CORS
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowFrontend",
@@ -39,8 +58,7 @@ builder.Services.AddCors(options =>
         });
 });
 
-
-//SUPABASE CONEXAO
+// SUPABASE CONEXAO
 builder.Services.AddScoped<Supabase.Client>(sp =>
 {
     var config = sp.GetRequiredService<IConfiguration>();
@@ -55,13 +73,12 @@ builder.Services.AddScoped<Supabase.Client>(sp =>
         }
     );
 
-    // 🔥 ESSENCIAL: inicializa no próprio ciclo do DI
     client.InitializeAsync().Wait();
 
     return client;
 });
 
-//SQL SERVER CONN - EF CORE
+// SQL SERVER CONN - EF CORE
 builder.Services.AddDbContext<AppDbContext>(options =>
 {
     options.UseSqlServer(
@@ -69,9 +86,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     );
 });
 
-
-// SERVICES!! SERVICES!! SERVICES!! //
-
+// SERVICES
 builder.Services.AddScoped<Consorcio>();
 builder.Services.AddScoped<ClienteService>();
 builder.Services.AddScoped<UserService>();
@@ -80,10 +95,6 @@ builder.Services.AddScoped<ProductService>();
 builder.Services.AddScoped<IApiKeyGeneratorService, ApiKeyGeneratorService>();
 builder.Services.AddScoped<IGeneralConfigsService, GeneralConfigsService>();
 
-
-
-
-
 // ---------------------------- //
 
 var open_testing = new DBTestClass(builder.Configuration);
@@ -91,25 +102,24 @@ open_testing.ConnDBTesting();
 
 var app = builder.Build();
 
-
-// Configure the HTTP request pipeline.
+// ─── Middleware ───────────────────────────────────────────────
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerUI(options =>
+    {
+        options.SwaggerEndpoint("/swagger/v1/swagger.json", "API Sentinel v1");
+        options.RoutePrefix   = "docs";
+        options.DocumentTitle = "API Sentinel Documentation";
+        options.DisplayRequestDuration();
+        options.EnableDeepLinking();
+    });
 }
-
+// ──────────────────────────────────────────────────────────────
 
 app.UseHttpsRedirection();
 app.UseCors("AllowFrontend");
 app.UseAuthorization();
 app.MapControllers();
 
-
-
-
-
 app.Run();
-
-
-
