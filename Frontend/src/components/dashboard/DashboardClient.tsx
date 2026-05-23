@@ -7,7 +7,7 @@ import DataTable from "@/components/ui/DataTable";
 import StatusBadge from "@/components/ui/StatusBadge";
 import PageHeader from "@/components/ui/PageHeader";
 import { getDashboardMain } from "@/app/services/pagesService";
-import type { DashboardMain, DashboardExecution } from "@/lib/types";
+import type { DashboardMain, DashboardExecution, ExecutionStatus } from "@/lib/types";
 
 function formatDate(iso: string) {
   const d = new Date(iso);
@@ -152,7 +152,7 @@ export default function DashboardClient() {
               key: "status",
               header: "Status",
               width: "120px",
-              render: (val) => <StatusBadge status={val as Execution["status"]} />,
+              render: (val) => <StatusBadge status={val as ExecutionStatus} />,
             },
             {
               key: "statusCode",
