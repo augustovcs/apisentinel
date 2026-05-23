@@ -47,4 +47,5 @@ export interface CreateTestType {
     body: unknown;
     expectedStatusCode: number;
     maxResponseTime: number;
+    lastStatus?: ExecutionStatus;
 }

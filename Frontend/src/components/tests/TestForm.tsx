@@ -14,7 +14,7 @@ const HTTP_METHODS: HttpMethod[] = ["GET", "POST", "PUT", "PATCH", "DELETE", "HE
 
 interface TestFormProps {
   initialValues?: {
-    id: number,
+    id: number;
     name: string;
     url: string;
     method: HttpMethod;
@@ -22,8 +22,8 @@ interface TestFormProps {
     body: string;
     expectedStatusCode: number;
     maxResponseTime: number;
-    lastStatus: ExecutionStatus = "pending";
-  }; 
+    lastStatus?: ExecutionStatus;
+  };
   mode: "create" | "edit";
 }
 
@@ -35,7 +35,7 @@ const DEFAULT_VALUES = {
   body: "",
   expectedStatusCode: 200,
   maxResponseTime: 500,
-  lastStatus: ""
+  lastStatus: "pending" as ExecutionStatus,
 };
 
 const inputStyle: React.CSSProperties = {
@@ -79,7 +79,7 @@ export default function TestForm({ initialValues, mode }: TestFormProps) {
   const [expectedStatusCode, setExpectedStatusCode] = useState(init.expectedStatusCode);
   const [maxResponseTime, setMaxResponseTime] = useState(init.maxResponseTime);
   const [errors, setErrors] = useState<Record<string, string>>({});
-  const [lastStatus] = useState(init.lastStatus)
+  const [lastStatus] = useState<ExecutionStatus>(init.lastStatus ?? "pending");
 
   const validate = () => {
     const e: Record<string, string> = {};
