@@ -56,7 +56,7 @@ public class ProductControlls : ControllerBase
     /// <returns>Mensagem de confirmação</returns>
     /// <response code="200">Produto deletado com sucesso</response>
     /// <response code="404">Produto não encontrado</response>
-    [HttpDelete("/delete-produtc/{id}")]
+    [HttpDelete("/delete-product/{id}")]
     [ProducesResponseType(200)]
     [ProducesResponseType(404)]
     public async Task<IActionResult> Delete([FromRoute] int id)

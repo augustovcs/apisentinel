@@ -81,3 +81,6 @@ public class GeneralConfigsController : ControllerBase
         return Ok(new { api_key = apiKey });
     }
 }
+
+
+
