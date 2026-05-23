@@ -51,7 +51,7 @@ export default function Sidebar() {
   const pathname = usePathname();
 
   const isActive = (href: string) => {
-    if (href === "/dashboard") return pathname === "/dashboard" || pathname.startsWith("/dashboard");
+    if (href === "/dashboard") return pathname === "/dashboard";
     return pathname.startsWith(href);
   };
 
