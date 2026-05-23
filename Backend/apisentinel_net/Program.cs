@@ -109,7 +109,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI(options =>
     {
         options.SwaggerEndpoint("/swagger/v1/swagger.json", "API Sentinel v1");
-        options.RoutePrefix   = "docs";
+        options.RoutePrefix   = "swagger";
         options.DocumentTitle = "API Sentinel Documentation";
         options.DisplayRequestDuration();
         options.EnableDeepLinking();
