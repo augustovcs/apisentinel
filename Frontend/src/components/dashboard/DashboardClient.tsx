@@ -1,12 +1,13 @@
 "use client";
 
 import Link from "next/link";
-import { mockStats, mockExecutions } from "@/lib/mock-data";
+import { useQuery } from "@tanstack/react-query";
 import StatCard from "@/components/dashboard/StatCard";
 import DataTable from "@/components/ui/DataTable";
 import StatusBadge from "@/components/ui/StatusBadge";
 import PageHeader from "@/components/ui/PageHeader";
-import type { Execution } from "@/lib/types";
+import { getTests } from "@/app/services/testsService";
+import type { ApiTest, Execution } from "@/lib/types";
 
 function formatDate(iso: string) {
   const d = new Date(iso);
@@ -20,9 +21,47 @@ function formatDate(iso: string) {
 }
 
 
-const recentExecutions = mockExecutions.slice(0, 8);
-
 export default function DashboardClient() {
+  const {
+    data: tests = [],
+    isLoading,
+    error,
+  } = useQuery<ApiTest[]>({
+    queryKey: ["tests"],
+    queryFn: getTests,
+    staleTime: 1000 * 60,
+  });
+
+  const totalTests = tests.length;
+  const successCount = tests.filter((test) => test.lastStatus === "success").length;
+  const failedCount = tests.filter((test) => test.lastStatus === "failed").length;
+  const successRate = totalTests > 0 ? Math.round((successCount / totalTests) * 100) : 0;
+  const avgResponseTime = totalTests > 0 ? Math.round(tests.reduce((sum, test) => sum + test.maxResponseTime, 0) / totalTests) : 0;
+
+  const recentExecutions = tests
+    .slice()
+    .sort((a, b) => {
+      const aDate = new Date(a.updatedAt || a.createdAt).getTime();
+      const bDate = new Date(b.updatedAt || b.createdAt).getTime();
+      return bDate - aDate;
+    })
+    .slice(0, 8)
+    .map((test) => ({
+      testName: test.name,
+      status: test.lastStatus ?? "pending",
+      statusCode: test.expectedStatusCode,
+      responseTime: test.maxResponseTime,
+      executedAt: test.updatedAt || test.createdAt,
+    }));
+
+  if (isLoading) {
+    return <div>Loading dashboard...</div>;
+  }
+
+  if (error) {
+    return <div>Failed to load dashboard data.</div>;
+  }
+
   return (
     <div>
       <PageHeader
@@ -41,9 +80,9 @@ export default function DashboardClient() {
       >
         <StatCard
           label="Total Tests"
-          value={mockStats.totalTests}
+          value={totalTests}
           accent="#0B3D2E"
-          trend={{ direction: "up", label: "2 added this week" }}
+          trend={{ direction: "up", label: "Uses current test data" }}
           icon={
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="square">
               <path d="M9 3H5a2 2 0 0 0-2 2v4m6-6h10a2 2 0 0 1 2 2v4M9 3v18m0 0h10a2 2 0 0 0 2-2V9M9 21H5a2 2 0 0 1-2-2V9m0 0h18" />
@@ -52,10 +91,10 @@ export default function DashboardClient() {
         />
         <StatCard
           label="Success Rate"
-          value={mockStats.successRate}
+          value={successRate}
           unit="%"
           accent="#27AE60"
-          trend={{ direction: "down", label: "–3.1% vs yesterday" }}
+          trend={{ direction: "neutral", label: "Based on current tests" }}
           icon={
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="square">
               <polyline points="20 6 9 17 4 12" />
@@ -63,10 +102,10 @@ export default function DashboardClient() {
           }
         />
         <StatCard
-          label="Failed (Last 24h)"
-          value={mockStats.failedLast24h}
+          label="Failed Tests"
+          value={failedCount}
           accent="#DC2626"
-          trend={{ direction: "up", label: "+2 since yesterday" }}
+          trend={{ direction: "up", label: "Current failed count" }}
           icon={
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="square">
               <circle cx="12" cy="12" r="10" />
@@ -77,10 +116,10 @@ export default function DashboardClient() {
         />
         <StatCard
           label="Avg Response Time"
-          value={mockStats.avgResponseTime}
+          value={avgResponseTime}
           unit="ms"
           accent="#145A32"
-          trend={{ direction: "neutral", label: "Stable" }}
+          trend={{ direction: "neutral", label: "Based on test targets" }}
           icon={
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="square">
               <circle cx="12" cy="12" r="10" />
