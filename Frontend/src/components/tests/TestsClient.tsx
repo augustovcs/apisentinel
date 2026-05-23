@@ -11,6 +11,7 @@ import PageHeader from "@/components/ui/PageHeader";
 import { deleteTests, getTests } from "@/app/services/testsService";
 import type { ApiTest } from "@/lib/types";
 import {QueryClient, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { reportWebVitals } from "next/dist/build/templates/pages";
 
 export default function TestsClient() {
   const {
@@ -71,8 +72,7 @@ export default function TestsClient() {
             header: "Name",
             render: (val, row) => (
 
-            //LOG API
-            //console.log(row);
+
 
               
               <Link
@@ -153,6 +153,8 @@ export default function TestsClient() {
     </div>
   );
 }
+
+
 
 function ActionButtons({ id, onDelete, }: { id: number, onDelete: () => void; }) {
   return (

@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { useQueryClient } from "@tanstack/react-query";
 import Button from "@/components/ui/Button";
 import PageHeader from "@/components/ui/PageHeader";
 import type { HttpMethod, Header } from "@/lib/types";
@@ -63,6 +64,7 @@ const fieldRowStyle: React.CSSProperties = {
 
 export default function TestForm({ initialValues, mode }: TestFormProps) {
   const router = useRouter();
+  const queryClient = useQueryClient();
   const init = initialValues ?? DEFAULT_VALUES;
   const id = initialValues?.id;
   const [name, setName] = useState(init.name);
@@ -133,6 +135,8 @@ export default function TestForm({ initialValues, mode }: TestFormProps) {
         else {
           await patchUpdateTest(id!, payload);
         }
+
+        await queryClient.invalidateQueries({ queryKey: ["tests"] });
 
         alert(`Test ${mode === "create" ? "created" : "updated"} successfully!`);
         console.log(parsedHeaders);
