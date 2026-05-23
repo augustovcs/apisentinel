@@ -7,8 +7,10 @@ import Button from "@/components/ui/Button";
 import PageHeader from "@/components/ui/PageHeader";
 import type { HttpMethod, Header } from "@/lib/types";
 import { patchUpdateTest, postCreateTest } from "@/app/services/testsService";
+import type { ExecutionStatus } from "@/lib/types";
 
 const HTTP_METHODS: HttpMethod[] = ["GET", "POST", "PUT", "PATCH", "DELETE", "HEAD", "OPTIONS"];
+
 
 interface TestFormProps {
   initialValues?: {
@@ -20,7 +22,8 @@ interface TestFormProps {
     body: string;
     expectedStatusCode: number;
     maxResponseTime: number;
-  };
+    lastStatus: ExecutionStatus = "pending";
+  }; 
   mode: "create" | "edit";
 }
 
@@ -32,6 +35,7 @@ const DEFAULT_VALUES = {
   body: "",
   expectedStatusCode: 200,
   maxResponseTime: 500,
+  lastStatus: ""
 };
 
 const inputStyle: React.CSSProperties = {
@@ -75,6 +79,7 @@ export default function TestForm({ initialValues, mode }: TestFormProps) {
   const [expectedStatusCode, setExpectedStatusCode] = useState(init.expectedStatusCode);
   const [maxResponseTime, setMaxResponseTime] = useState(init.maxResponseTime);
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [lastStatus] = useState(init.lastStatus)
 
   const validate = () => {
     const e: Record<string, string> = {};
@@ -114,12 +119,14 @@ export default function TestForm({ initialValues, mode }: TestFormProps) {
           name,
           url,
           method,
+
           headers: parsedHeaders,
 
           body: body ? JSON.parse(body) : {},
 
           expectedStatusCode,
           maxResponseTime,
+          lastStatus
         };
         
       console.log("initialValues:", initialValues);
