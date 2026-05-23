@@ -13,7 +13,7 @@ export async function getTests(): Promise<ApiTest[]> {
 
         },
     });
-
+    
     if (!response.ok) {
         throw new Error("Failed to fetch!! GET TESTS");
     }
