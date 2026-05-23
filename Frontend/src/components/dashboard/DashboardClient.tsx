@@ -6,8 +6,8 @@ import StatCard from "@/components/dashboard/StatCard";
 import DataTable from "@/components/ui/DataTable";
 import StatusBadge from "@/components/ui/StatusBadge";
 import PageHeader from "@/components/ui/PageHeader";
-import { getTests } from "@/app/services/testsService";
-import type { ApiTest, Execution } from "@/lib/types";
+import { getDashboardMain } from "@/app/services/pagesService";
+import type { DashboardMain, DashboardExecution } from "@/lib/types";
 
 function formatDate(iso: string) {
   const d = new Date(iso);
@@ -22,36 +22,25 @@ function formatDate(iso: string) {
 
 
 export default function DashboardClient() {
-  const {
-    data: tests = [],
-    isLoading,
-    error,
-  } = useQuery<ApiTest[]>({
-    queryKey: ["tests"],
-    queryFn: getTests,
+  const { data: dashboard, isLoading, error } = useQuery<DashboardMain>({
+    queryKey: ["dashboardMain"],
+    queryFn: getDashboardMain,
     staleTime: 1000 * 60,
   });
 
-  const totalTests = tests.length;
-  const successCount = tests.filter((test) => test.lastStatus === "success").length;
-  const failedCount = tests.filter((test) => test.lastStatus === "failed").length;
-  const successRate = totalTests > 0 ? Math.round((successCount / totalTests) * 100) : 0;
-  const avgResponseTime = totalTests > 0 ? Math.round(tests.reduce((sum, test) => sum + test.maxResponseTime, 0) / totalTests) : 0;
+  const totalTests = dashboard?.totalTests ?? 0;
+  const successRate = dashboard?.successRate ?? 0;
+  const failedCount = dashboard?.failedTests ?? 0;
+  const avgResponseTime = dashboard?.avgResponseTime ?? 0;
 
-  const recentExecutions = tests
+  const recentExecutions = (dashboard?.recentExecutions ?? [])
     .slice()
-    .sort((a, b) => {
-      const aDate = new Date(a.updatedAt || a.createdAt).getTime();
-      const bDate = new Date(b.updatedAt || b.createdAt).getTime();
-      return bDate - aDate;
-    })
-    .slice(0, 8)
-    .map((test) => ({
-      testName: test.name,
-      status: test.lastStatus ?? "pending",
-      statusCode: test.expectedStatusCode,
-      responseTime: test.maxResponseTime,
-      executedAt: test.updatedAt || test.createdAt,
+    .map((e: DashboardExecution) => ({
+      testName: e.testName ?? "",
+      status: e.status ?? "pending",
+      statusCode: e.statusCode,
+      responseTime: e.responseTime,
+      executedAt: e.executedAt ?? new Date().toISOString(),
     }));
 
   if (isLoading) {

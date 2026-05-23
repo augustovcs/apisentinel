@@ -49,3 +49,19 @@ export interface CreateTestType {
     maxResponseTime: number;
     lastStatus?: ExecutionStatus;
 }
+
+export interface DashboardExecution {
+  testName?: string;
+  status?: ExecutionStatus | "pending";
+  statusCode?: number | null;
+  responseTime?: number | null;
+  executedAt?: string | null;
+}
+
+export interface DashboardMain {
+  totalTests: number;
+  successRate: number;
+  failedTests: number;
+  avgResponseTime: number;
+  recentExecutions: DashboardExecution[];
+}

@@ -4,7 +4,7 @@ using Supabase;
 using Interface.Dev;
 using System.Linq;
 
-namespace Services.Pages;
+namespace Services.Dev.Pages;
 
 /// <summary>
 /// Implementation of <see cref="IPagesRequest"/>.
