@@ -6,6 +6,7 @@ import StatCard from "@/components/dashboard/StatCard";
 import DataTable from "@/components/ui/DataTable";
 import StatusBadge from "@/components/ui/StatusBadge";
 import PageHeader from "@/components/ui/PageHeader";
+import Spinner from "@/components/ui/Spinner";
 import { getDashboardMain } from "@/app/services/pagesService";
 import type { DashboardMain, DashboardExecution, ExecutionStatus } from "@/lib/types";
 
@@ -44,7 +45,11 @@ export default function DashboardClient() {
     }));
 
   if (isLoading) {
-    return <div>Loading dashboard...</div>;
+    return (
+      <div className="min-h-screen flex items justify-center pb-30">
+        <Spinner size="xl" />
+      </div>
+    );
   }
 
   if (error) {
@@ -53,13 +58,18 @@ export default function DashboardClient() {
 
   return (
     <div>
+      
       <PageHeader
+      
         title="Dashboard"
         subtitle="System-wide overview of API test health and recent executions."
       />
+      {/* loading spinner removed from here; handled in loading state */}
+
 
       {/* Stat cards */}
       <div
+        
         style={{
           display: "grid",
           gridTemplateColumns: "repeat(4, 1fr)",
