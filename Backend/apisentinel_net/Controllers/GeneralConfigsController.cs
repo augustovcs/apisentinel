@@ -56,25 +56,24 @@ public class GeneralConfigsController : ControllerBase
         return Ok(get);
     }
 
-    [HttpPost("regenerate-api-key")]
-    public async Task<IActionResult> RegenerateApiKey()
+    [HttpPost("regenerate-api-key/{id}")]
+    public async Task<IActionResult> RegenerateApiKey(int id)
     {
-        try
-        {
-            var apiKey =
-                await _service.RegenerateApiKey();
-
-            return Ok(new
-            {
-                api_key = apiKey
-            });
-        }
-        catch (Exception ex)
+        if (id != 1)
         {
             return BadRequest(new
             {
-                message = ex.Message
+                message = "apenas o id 1 é permitido"
             });
         }
+
+        var apiKey =
+            await _service.RegenerateApiKey();
+
+        return Ok(new
+        {
+            api_key = apiKey
+        });
     }
+
 }
