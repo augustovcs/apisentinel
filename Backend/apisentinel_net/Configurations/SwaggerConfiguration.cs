@@ -16,7 +16,9 @@ public static class SwaggerConfiguration
             });
 
             var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+            Console.WriteLine("FILE NAME: ",xmlFilename);
             options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
+            
         });
 
         return services;

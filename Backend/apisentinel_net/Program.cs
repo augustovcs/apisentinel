@@ -30,6 +30,13 @@ builder.Services.AddSwaggerGen(options =>
     });
 
     var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+
+    Console.WriteLine(
+    Assembly.GetExecutingAssembly().GetName().Name
+    );
+
+    Console.WriteLine(AppContext.BaseDirectory);
+
     options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
 
     options.TagActionsBy(api =>
@@ -111,7 +118,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI(options =>
     {
         options.SwaggerEndpoint("/swagger/v1/swagger.json", "API Sentinel v1");
-        options.RoutePrefix   = "docs";
+        options.RoutePrefix   = "swagger";
         options.DocumentTitle = "API Sentinel Documentation";
         options.DisplayRequestDuration();
         options.EnableDeepLinking();
