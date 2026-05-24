@@ -30,4 +30,11 @@ public class ExecutionTestController : ControllerBase
     }
 
 
+    [HttpPost("run-execution")]
+    public async Task<IActionResult> RunExecution([FromBody] RequestExecutionDTO req)
+    {
+        var get = await _executionsService.CreateExecution(req);
+        return Ok(get);
+    }
+
 }
