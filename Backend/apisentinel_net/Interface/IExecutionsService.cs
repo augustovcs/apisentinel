@@ -1,5 +1,7 @@
 using DTOs.Dev;
 
+namespace Interface.Dev;
+
 public interface IExecutionsService
 {
     public Task<List<ResponseExecutionDTO>> GetExecutionsFull();
