@@ -99,6 +99,7 @@ public class ExecutionsService : IExecutionsService
             {
                 Id = createdExecution.Id,
                 TestId = createdExecution.TestId,
+                TestName = test.Name,
                 Status = createdExecution.Status,
                 StatusCode = createdExecution.StatusCode,
                 ResponseTime = createdExecution.ResponseTime,
@@ -141,14 +142,21 @@ public class ExecutionsService : IExecutionsService
 
     public async Task<List<ResponseExecutionDTO>> GetExecutionsFull()
     {
-        var response = await _supabase
-        .From<ExecutionModel>()
-        .Get();
+        var executionsResponse = await _supabase
+            .From<ExecutionModel>()
+            .Get();
 
-        return response.Models.Select(e => new ResponseExecutionDTO
+        var testsResponse = await _supabase
+            .From<TestsModel>()
+            .Get();
+
+        var tests = testsResponse.Models.ToDictionary(t => t.Id, t => t.Name);
+
+        return executionsResponse.Models.Select(e => new ResponseExecutionDTO
         {
             Id = e.Id,
             TestId = e.TestId,
+            TestName = tests.TryGetValue(e.TestId, out var testName) ? testName : null,
             Status = e.Status,
             ResponseTime = e.ResponseTime,
             StatusCode = e.StatusCode,
@@ -156,7 +164,6 @@ public class ExecutionsService : IExecutionsService
             ExecutedAt = e.ExecutedAt
 
         }).ToList();
-        
     }
 
     public Task<ResponseExecutionDTO> PatchUpdateExecution(RequestExecutionDTO request)

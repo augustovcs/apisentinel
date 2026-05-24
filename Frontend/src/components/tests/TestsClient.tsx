@@ -156,7 +156,7 @@ export default function TestsClient() {
             key: "id",
             header: "Actions",
             width: "170px",
-            render: (val) => <ActionButtons id={val as number} onDelete={() => deleteMutation.mutate(Number(val))} onRun={() => runMutation.mutate(val)}/>,
+            render: (val) => <ActionButtons id={val as number} onDelete={() => deleteMutation.mutate(Number(val))} onRun={() => runMutation.mutate(Number(val))}/>,
           },
         ]}
         //tests = dev mockTests = mock view

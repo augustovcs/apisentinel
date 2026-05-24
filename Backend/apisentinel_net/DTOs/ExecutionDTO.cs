@@ -9,6 +9,8 @@ public class ResponseExecutionDTO : RequestExecutionDTO
 {
     public long Id { get; set; }
 
+    public string? TestName { get; set; }
+
     public string? Status { get; set; }
 
     public int? ResponseTime { get; set; }
