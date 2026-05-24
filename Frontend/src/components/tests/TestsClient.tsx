@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { mockTests } from "@/lib/mock-data";
 import DataTable from "@/components/ui/DataTable";
@@ -9,11 +10,13 @@ import MethodBadge from "@/components/ui/MethodBadge";
 import Button from "@/components/ui/Button";
 import PageHeader from "@/components/ui/PageHeader";
 import { deleteTests, getTests } from "@/app/services/testsService";
+import { runExecution } from "@/app/services/executionsService";
 import type { ApiTest } from "@/lib/types";
 import {QueryClient, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { reportWebVitals } from "next/dist/build/templates/pages";
 
 export default function TestsClient() {
+  const router = useRouter();
   const {
     data: tests = [],
     isLoading,
@@ -36,6 +39,16 @@ export default function TestsClient() {
         queryKey: ["tests"]
       })
 
+    }
+  })
+
+  const runMutation = useMutation({
+    mutationFn: (testId: number) => runExecution(testId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["executions"]
+      })
+      router.push("/dashboard/executions");
     }
   })
 
@@ -143,7 +156,7 @@ export default function TestsClient() {
             key: "id",
             header: "Actions",
             width: "170px",
-            render: (val) => <ActionButtons id={val as number} onDelete={() => deleteMutation.mutate(Number(val))}/>,
+            render: (val) => <ActionButtons id={val as number} onDelete={() => deleteMutation.mutate(Number(val))} onRun={() => runMutation.mutate(val)}/>,
           },
         ]}
         //tests = dev mockTests = mock view
@@ -156,13 +169,13 @@ export default function TestsClient() {
 
 
 
-function ActionButtons({ id, onDelete, }: { id: number, onDelete: () => void; }) {
+function ActionButtons({ id, onDelete, onRun }: { id: number, onDelete: () => void, onRun: () => void; }) {
   return (
     <div style={{ display: "flex", gap: "6px" }}>
       <Link href={`/dashboard/tests/${id}/edit`} style={{ textDecoration: "none" }}>
         <ActionBtn color="#374151" borderColor="#D1D5DB" hoverBg="#F3F4F6">Edit</ActionBtn>
       </Link>
-      <ActionBtn color="#27AE60" borderColor="#27AE60" hoverBg="#F0FDF4">Run</ActionBtn>
+      <ActionBtn color="#27AE60" borderColor="#27AE60" hoverBg="#F0FDF4" onClick={onRun}>Run</ActionBtn>
       <ActionBtn color="#DC2626" borderColor="#FCA5A5" hoverBg="#FEF2F2" onClick={onDelete}>Delete</ActionBtn>
     </div>
   );

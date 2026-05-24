@@ -1,7 +1,8 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import { mockExecutions } from "@/lib/mock-data";
+import { useQuery } from "@tanstack/react-query";
+import { getExecutions } from "@/app/services/executionsService";
 import DataTable from "@/components/ui/DataTable";
 import StatusBadge from "@/components/ui/StatusBadge";
 import PageHeader from "@/components/ui/PageHeader";
@@ -38,13 +39,19 @@ const selectStyle: React.CSSProperties = {
 };
 
 export default function ExecutionsPage() {
+  const { data: executions = [], isLoading, error } = useQuery({
+    queryKey: ["executions"],
+    queryFn: getExecutions,
+    staleTime: 1000 * 60 * 1,
+  });
+
   const [statusFilter, setStatusFilter] = useState<ExecutionStatus | "all">("all");
   const [dateFrom, setDateFrom] = useState("");
   const [dateTo, setDateTo] = useState("");
   const [search, setSearch] = useState("");
 
   const filtered = useMemo(() => {
-    return mockExecutions.filter((ex) => {
+    return executions.filter((ex) => {
       if (statusFilter !== "all" && ex.status !== statusFilter) return false;
       if (search && !ex.testName.toLowerCase().includes(search.toLowerCase())) return false;
       const ts = new Date(ex.executedAt).getTime();
@@ -52,7 +59,7 @@ export default function ExecutionsPage() {
       if (dateTo && ts > new Date(dateTo + "T23:59:59").getTime()) return false;
       return true;
     });
-  }, [statusFilter, dateFrom, dateTo, search]);
+  }, [statusFilter, dateFrom, dateTo, search, executions]);
 
   const clearFilters = () => {
     setStatusFilter("all");
@@ -63,11 +70,19 @@ export default function ExecutionsPage() {
 
   const hasFilters = statusFilter !== "all" || dateFrom || dateTo || search;
 
+  if (isLoading) {
+    return <div>Loading executions...</div>;
+  }
+
+  if (error) {
+    return <div>Failed to load executions.</div>;
+  }
+
   return (
     <div>
       <PageHeader
         title="Executions"
-        subtitle={`${filtered.length} of ${mockExecutions.length} executions`}
+        subtitle={`${filtered.length} of ${executions.length} executions`}
       />
 
       {/* Filters bar */}
@@ -147,7 +162,7 @@ export default function ExecutionsPage() {
         {/* Status summary chips */}
         <div style={{ marginLeft: "auto", display: "flex", gap: "8px" }}>
           {(["success", "failed", "timeout"] as ExecutionStatus[]).map((s) => {
-            const count = mockExecutions.filter((e) => e.status === s).length;
+            const count = executions.filter((e) => e.status === s).length;
             return (
               <button
                 key={s}
@@ -201,7 +216,7 @@ export default function ExecutionsPage() {
                     : "#166534",
                 }}
               >
-                
+                {val || "—"}
               </span>
             ),
           },

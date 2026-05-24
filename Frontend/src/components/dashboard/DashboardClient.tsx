@@ -8,7 +8,7 @@ import StatusBadge from "@/components/ui/StatusBadge";
 import PageHeader from "@/components/ui/PageHeader";
 import Spinner from "@/components/ui/Spinner";
 import { getDashboardMain } from "@/app/services/pagesService";
-import type { DashboardMain, DashboardExecution, ExecutionStatus } from "@/lib/types";
+import type { DashboardMain, DashboardExecution, ExecutionStatus, HttpMethod } from "@/lib/types";
 
 function formatDate(iso: string) {
   const d = new Date(iso);
@@ -169,11 +169,7 @@ export default function DashboardClient() {
               header: "HTTP",
               width: "80px",
               align: "center",
-              render: (val) => (
-                <span style={{ fontFamily: "monospace", fontSize: "12px", color: val ? "#1C1C1C" : "#9CA3AF" }}>
-                  
-                </span>
-              ),
+              render: (val) => (<span style={{ fontWeight: 500 }}>{val as string}</span>),
             },
             {
               key: "responseTime",
