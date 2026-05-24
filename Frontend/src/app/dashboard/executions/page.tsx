@@ -6,6 +6,7 @@ import { getExecutions } from "@/app/services/executionsService";
 import DataTable from "@/components/ui/DataTable";
 import StatusBadge from "@/components/ui/StatusBadge";
 import PageHeader from "@/components/ui/PageHeader";
+import Spinner from "@/components/ui/Spinner";
 import type { ExecutionStatus, Execution } from "@/lib/types";
 
 const STATUS_OPTIONS: { value: ExecutionStatus | "all"; label: string }[] = [
@@ -51,9 +52,15 @@ export default function ExecutionsPage() {
   const [search, setSearch] = useState("");
 
   const filtered = useMemo(() => {
+    const query = search.trim().toLowerCase();
     return executions.filter((ex) => {
       if (statusFilter !== "all" && ex.status !== statusFilter) return false;
-      if (search && !ex.testName.toLowerCase().includes(search.toLowerCase())) return false;
+      if (query) {
+        const status = ex.status?.toLowerCase() ?? "";
+        const testName = ex.testName?.toLowerCase() ?? "";
+        const statusCode = ex.statusCode != null ? String(ex.statusCode) : "";
+        if (!testName.includes(query) && !status.includes(query) && !statusCode.includes(query)) return false;
+      }
       const ts = new Date(ex.executedAt).getTime();
       if (dateFrom && ts < new Date(dateFrom).getTime()) return false;
       if (dateTo && ts > new Date(dateTo + "T23:59:59").getTime()) return false;
@@ -71,7 +78,11 @@ export default function ExecutionsPage() {
   const hasFilters = statusFilter !== "all" || dateFrom || dateTo || search;
 
   if (isLoading) {
-    return <div>Loading executions...</div>;
+    return (
+      <div className="min-h-screen flex items justify-center pb-30">
+        <Spinner size="xl" />
+      </div>
+    );
   }
 
   if (error) {
@@ -216,7 +227,7 @@ export default function ExecutionsPage() {
                     : "#166534",
                 }}
               >
-                {val || "—"}
+                {val != null ? String(val) : "—"}
               </span>
             ),
           },

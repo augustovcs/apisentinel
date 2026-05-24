@@ -2,13 +2,13 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
-import { mockTests } from "@/lib/mock-data";
+import { useMemo, useState } from "react";
 import DataTable from "@/components/ui/DataTable";
 import StatusBadge from "@/components/ui/StatusBadge";
 import MethodBadge from "@/components/ui/MethodBadge";
 import Button from "@/components/ui/Button";
 import PageHeader from "@/components/ui/PageHeader";
+import Spinner from "@/components/ui/Spinner";
 import { deleteTests, getTests } from "@/app/services/testsService";
 import { runExecution } from "@/app/services/executionsService";
 import type { ApiTest } from "@/lib/types";
@@ -30,7 +30,7 @@ export default function TestsClient() {
   });
 
   const queryClient = useQueryClient();
-
+  const [search, setSearch] = useState("");
 
   const deleteMutation = useMutation({
     mutationFn: deleteTests,
@@ -52,8 +52,26 @@ export default function TestsClient() {
     }
   })
 
+  const filteredTests = useMemo(() => {
+    const q = search.trim().toLowerCase();
+    if (!q) return tests;
+    return tests.filter((test) => {
+      return (
+        test.name.toLowerCase().includes(q) ||
+        (test.url ?? "").toLowerCase().includes(q) ||
+        test.method.toLowerCase().includes(q) ||
+        String(test.expectedStatusCode).includes(q) ||
+        (test.lastStatus ?? "").toLowerCase().includes(q)
+      );
+    });
+  }, [search, tests]);
+
   if (isLoading) {
-    return <div>Loading tests...</div>;
+    return (
+      <div className="min-h-screen flex items justify-center pb-30">
+        <Spinner size="xl" />
+      </div>
+    );
   }
 
   if (error) {
@@ -64,7 +82,7 @@ export default function TestsClient() {
     <div>
       <PageHeader
         title="Tests"
-        subtitle={`${tests.length} configured API tests`}
+        subtitle={`${filteredTests.length} of ${tests.length} configured API tests`}
         actions={
           <Link href="/dashboard/tests/new" style={{ textDecoration: "none" }}>
             <Button variant="primary" size="sm">
@@ -77,6 +95,25 @@ export default function TestsClient() {
           </Link>
         }
       />
+
+      <div style={{ margin: "16px 0", display: "flex", gap: "10px", flexWrap: "wrap", alignItems: "center" }}>
+        <input
+          type="search"
+          placeholder="Search tests, endpoints, status..."
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          style={{
+            flex: 1,
+            minWidth: "240px",
+            height: "38px",
+            padding: "0 12px",
+            border: "1px solid #D1D5DB",
+            borderRadius: "8px",
+            outline: "none",
+            fontSize: "14px",
+          }}
+        />
+      </div>
 
       <DataTable<ApiTest>
         columns={[
@@ -160,7 +197,7 @@ export default function TestsClient() {
           },
         ]}
         //tests = dev mockTests = mock view
-        data={tests}
+        data={filteredTests}
         emptyMessage="No tests configured. Create your first test."
       />
     </div>

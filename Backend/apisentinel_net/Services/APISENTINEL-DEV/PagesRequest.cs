@@ -39,11 +39,13 @@ public class PagesRequest : IPagesRequest
         var tests = testsResp.Models ?? new List<TestsModel>();
         var executions = execResp.Models ?? new List<ExecutionModel>();
 
-        var totalTests = tests.Count;
-        var successCount = tests.Count(t => string.Equals(t.LastStatus, "success", StringComparison.OrdinalIgnoreCase));
-        var failedCount = tests.Count(t => string.Equals(t.LastStatus, "failed", StringComparison.OrdinalIgnoreCase));
-        var successRate = totalTests > 0 ? (int)Math.Round((double)successCount / totalTests * 100) : 0;
-        var avgResponseTime = totalTests > 0 ? (int)Math.Round(tests.Average(t => (decimal)(t.MaxResponseTime ?? 0))) : 0;
+        var totalExecutions = executions.Count;
+        var successCount = executions.Count(e => string.Equals(e.Status, "success", StringComparison.OrdinalIgnoreCase));
+        var failedCount = executions.Count(e => string.Equals(e.Status, "failed", StringComparison.OrdinalIgnoreCase));
+        var successRate = totalExecutions > 0 ? (int)Math.Round((double)successCount / totalExecutions * 100) : 0;
+        var avgResponseTime = executions.Any(e => e.ResponseTime.HasValue)
+            ? (int)Math.Round(executions.Where(e => e.ResponseTime.HasValue).Average(e => (decimal)e.ResponseTime.Value))
+            : 0;
 
         var recentExecutions = executions
             .OrderByDescending(e => e.ExecutedAt ?? DateTime.MinValue)
@@ -60,7 +62,7 @@ public class PagesRequest : IPagesRequest
 
         return new DashboardMainDTO
         {
-            TotalTests = totalTests,
+            TotalTests = totalExecutions,
             SuccessRate = successRate,
             FailedTests = failedCount,
             AvgResponseTime = avgResponseTime,

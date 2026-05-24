@@ -3,7 +3,7 @@
 
 
 import { useState, useEffect } from "react";
-
+import Spinner from "@/components/ui/Spinner";
 
 export interface Users {
   id: number;
@@ -48,9 +48,11 @@ export default function PageStudies() {
     }, []);
 
     if (loading) {
-        return <div>
-            <h1> Carregando... </h1>
-        </div>
+        return (
+            <div className="min-h-screen flex items justify-center pb-30">
+                <Spinner size="xl" />
+            </div>
+        );
     }
     
     if (error) {
