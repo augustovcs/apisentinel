@@ -14,6 +14,7 @@ using Interface.general;
 using apisentinel_net.Services;
 using Microsoft.OpenApi.Models;
 using System.Reflection;
+using Services.Dev.Executions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -103,6 +104,7 @@ builder.Services.AddScoped<IPagesRequest, PagesRequest>();
 builder.Services.AddScoped<ProductService>();
 builder.Services.AddScoped<IApiKeyGeneratorService, ApiKeyGeneratorService>();
 builder.Services.AddScoped<IGeneralConfigsService, GeneralConfigsService>();
+builder.Services.AddScoped<IExecutionsService, ExecutionsService>();
 
 // ---------------------------- //
 
