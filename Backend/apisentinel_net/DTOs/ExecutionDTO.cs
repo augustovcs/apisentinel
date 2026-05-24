@@ -1,10 +1,13 @@
 namespace DTOs.Dev
 {
-    public class ExecutionDTO
+    public class RequestExecutionDTO
+    {
+        public long TestId { get; set; }
+    }
+
+    public class ResponseExecutionDTO : RequestExecutionDTO
     {
         public long Id { get; set; }
-
-        public long TestId { get; set; }
 
         public string? Status { get; set; }
 
@@ -16,4 +19,8 @@ namespace DTOs.Dev
 
         public DateTime? ExecutedAt { get; set; }
     }
+
+
+
+
 }

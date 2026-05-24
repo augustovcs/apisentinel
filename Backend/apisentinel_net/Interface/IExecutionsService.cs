@@ -2,10 +2,10 @@ using DTOs.Dev;
 
 public interface IExecutionsService
 {
-    public Task<List<ExecutionDTO>> GetExecutionsFull();
-    public Task<ExecutionDTO> GetExecutionById(int id);
-    public Task<ExecutionDTO> CreateExecution(RequestTestsDTO request);
-    public Task<ExecutionDTO> PatchUpdateExecution(RequestUpdateTestsDTO request);
+    public Task<List<ResponseExecutionDTO>> GetExecutionsFull();
+    public Task<ResponseExecutionDTO> GetExecutionById(int id);
+    public Task<ResponseExecutionDTO> CreateExecution(RequestExecutionDTO request);
+    public Task<ResponseExecutionDTO> PatchUpdateExecution(RequestExecutionDTO request);
     public Task<bool> DeleteExecutionById(int id);
 
 }
