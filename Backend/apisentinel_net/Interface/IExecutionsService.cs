@@ -9,5 +9,4 @@ public interface IExecutionsService
     public Task<ResponseExecutionDTO> CreateExecution(RequestExecutionDTO request);
     public Task<ResponseExecutionDTO> PatchUpdateExecution(RequestExecutionDTO request);
     public Task<bool> DeleteExecutionById(int id);
-
 }

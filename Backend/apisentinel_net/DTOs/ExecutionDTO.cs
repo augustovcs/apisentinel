@@ -20,5 +20,23 @@ public class ResponseExecutionDTO : RequestExecutionDTO
     public string? Error { get; set; }
 
     public DateTime? ExecutedAt { get; set; }
+
+    public string? Url { get; set; }
+
+    public string? Method { get; set; }
+
+    public Dictionary<string, object>? RequestHeaders { get; set; }
+
+    public Dictionary<string, object>? RequestBody { get; set; }
+
+    public int? ExpectedStatusCode { get; set; }
+
+    public int? MaxResponseTime { get; set; }
+
+    public string? TestLastStatus { get; set; }
+
+    public DateTime? TestCreatedAt { get; set; }
+
+    public DateTime? TestUpdatedAt { get; set; }
 }
 

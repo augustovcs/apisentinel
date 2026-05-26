@@ -37,4 +37,10 @@ public class ExecutionTestController : ControllerBase
         return Ok(get);
     }
 
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetExecutionById(int id)
+    {
+        var get = await _executionsService.GetExecutionById(id);
+        return Ok(get);
+    }
 }

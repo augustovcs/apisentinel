@@ -135,9 +135,43 @@ public class ExecutionsService : IExecutionsService
         throw new NotImplementedException();
     }
 
-    public Task<ResponseExecutionDTO> GetExecutionById(int id)
+    public async Task<ResponseExecutionDTO> GetExecutionById(int id)
     {
-        throw new NotImplementedException();
+        var execution = await _supabase
+            .From<ExecutionModel>()
+            .Where(x => x.Id == id)
+            .Single();
+
+        if (execution == null)
+        {
+            throw new Exception("Execution not found.");
+        }
+
+        var test = await _supabase
+            .From<TestsModel>()
+            .Where(x => x.Id == execution.TestId)
+            .Single();
+
+        return new ResponseExecutionDTO
+        {
+            Id = execution.Id,
+            TestId = execution.TestId,
+            TestName = test?.Name,
+            Status = execution.Status,
+            StatusCode = execution.StatusCode,
+            ResponseTime = execution.ResponseTime,
+            Error = execution.Error,
+            ExecutedAt = execution.ExecutedAt,
+            Url = test?.Url,
+            Method = test?.Method,
+            RequestHeaders = test?.Headers,
+            RequestBody = test?.Body,
+            ExpectedStatusCode = test?.ExpectedStatusCode,
+            MaxResponseTime = test?.MaxResponseTime,
+            TestLastStatus = test?.LastStatus,
+            TestCreatedAt = test?.CreatedAt,
+            TestUpdatedAt = test?.UpdatedAt
+        };
     }
 
     public async Task<List<ResponseExecutionDTO>> GetExecutionsFull()
