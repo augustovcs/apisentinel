@@ -18,51 +18,7 @@ export default function Topbar() {
         position: "sticky",
         top: 0,
         zIndex: 40,
-      }}
-    >
-      {/* Search */}
-      <div style={{ position: "relative", width: "300px" }}>
-        <span
-          style={{
-            position: "absolute",
-            left: "10px",
-            top: "50%",
-            transform: "translateY(-50%)",
-            color: "#9CA3AF",
-            pointerEvents: "none",
-          }}
-        >
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="square">
-            <circle cx="11" cy="11" r="8" />
-            <line x1="21" y1="21" x2="16.65" y2="16.65" />
-          </svg>
-        </span>
-        <input
-          type="text"
-          placeholder="Search tests, executions..."
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          style={{
-            width: "100%",
-            height: "32px",
-            paddingLeft: "32px",
-            paddingRight: "12px",
-            border: "1px solid #D1D5DB",
-            backgroundColor: "#F9FAFB",
-            fontSize: "13px",
-            color: "#1C1C1C",
-            outline: "none",
-          }}
-          onFocus={(e) => {
-            e.target.style.borderColor = "#27AE60";
-            e.target.style.backgroundColor = "#ffffff";
-          }}
-          onBlur={(e) => {
-            e.target.style.borderColor = "#D1D5DB";
-            e.target.style.backgroundColor = "#F9FAFB";
-          }}
-        />
-      </div>
+      }}>
 
       {/* Right side */}
       <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>
