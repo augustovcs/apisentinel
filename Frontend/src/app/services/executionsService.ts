@@ -1,4 +1,4 @@
-import type { Execution } from "@/lib/types";
+import type { Execution, ExecutionDetail } from "@/lib/types";
 
 const API_URL = "http://localhost:5199";
 
@@ -28,6 +28,21 @@ export async function runExecution(testId: number): Promise<Execution> {
 
     if (!response.ok) {
         throw new Error("Failed to run execution");
+    }
+
+    return response.json();
+}
+
+export async function getExecutionById(id: number): Promise<ExecutionDetail> {
+    const response = await fetch(`${API_URL}/executions/${id}`, {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+        },
+    });
+
+    if (!response.ok) {
+        throw new Error("Failed to fetch execution details");
     }
 
     return response.json();

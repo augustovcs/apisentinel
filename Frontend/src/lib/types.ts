@@ -33,6 +33,18 @@ export interface Execution {
   executedAt: string;
 }
 
+export interface ExecutionDetail extends Execution {
+  url: string | null;
+  method: string | null;
+  headers: Record<string, unknown> | null;
+  body: Record<string, unknown> | null;
+  expectedStatusCode: number | null;
+  maxResponseTime: number | null;
+  testLastStatus: ExecutionStatus | null;
+  testCreatedAt: string | null;
+  testUpdatedAt: string | null;
+}
+
 export interface DashboardStats {
   totalTests: number;
   successRate: number;

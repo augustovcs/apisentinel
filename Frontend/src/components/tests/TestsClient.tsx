@@ -9,6 +9,7 @@ import MethodBadge from "@/components/ui/MethodBadge";
 import Button from "@/components/ui/Button";
 import PageHeader from "@/components/ui/PageHeader";
 import Spinner from "@/components/ui/Spinner";
+import SearchInput from "@/components/ui/SearchInput";
 import { deleteTests, getTests } from "@/app/services/testsService";
 import { runExecution } from "@/app/services/executionsService";
 import type { ApiTest } from "@/lib/types";
@@ -97,21 +98,10 @@ export default function TestsClient() {
       />
 
       <div style={{ margin: "16px 0", display: "flex", gap: "10px", flexWrap: "wrap", alignItems: "center" }}>
-        <input
-          type="search"
-          placeholder="Search tests, endpoints, status..."
+        <SearchInput
           value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          style={{
-            flex: 1,
-            minWidth: "240px",
-            height: "38px",
-            padding: "0 12px",
-            border: "1px solid #D1D5DB",
-            borderRadius: "8px",
-            outline: "none",
-            fontSize: "14px",
-          }}
+          onChange={setSearch}
+          placeholder="Search tests, endpoints, status..."
         />
       </div>
 

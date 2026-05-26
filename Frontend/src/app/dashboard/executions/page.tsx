@@ -2,12 +2,13 @@
 
 import { useState, useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { getExecutions } from "@/app/services/executionsService";
+import { getExecutions, getExecutionById } from "@/app/services/executionsService";
 import DataTable from "@/components/ui/DataTable";
 import StatusBadge from "@/components/ui/StatusBadge";
 import PageHeader from "@/components/ui/PageHeader";
+import SearchInput from "@/components/ui/SearchInput";
 import Spinner from "@/components/ui/Spinner";
-import type { ExecutionStatus, Execution } from "@/lib/types";
+import type { ExecutionStatus, Execution, ExecutionDetail } from "@/lib/types";
 
 const STATUS_OPTIONS: { value: ExecutionStatus | "all"; label: string }[] = [
   { value: "all", label: "All Statuses" },
@@ -50,6 +51,14 @@ export default function ExecutionsPage() {
   const [dateFrom, setDateFrom] = useState("");
   const [dateTo, setDateTo] = useState("");
   const [search, setSearch] = useState("");
+  const [selectedExecutionId, setSelectedExecutionId] = useState<number | null>(null);
+
+  const { data: selectedExecution, isLoading: isLoadingExecution, error: executionError } = useQuery<ExecutionDetail | undefined>({
+    queryKey: ["execution", selectedExecutionId],
+    queryFn: () => getExecutionById(selectedExecutionId!),
+    enabled: selectedExecutionId !== null,
+    staleTime: 1000 * 10,
+  });
 
   const filtered = useMemo(() => {
     const query = search.trim().toLowerCase();
@@ -115,11 +124,10 @@ export default function ExecutionsPage() {
               <circle cx="11" cy="11" r="8" /><line x1="21" y1="21" x2="16.65" y2="16.65" />
             </svg>
           </span>
-          <input
-            style={{ ...selectStyle, width: "200px", paddingLeft: "28px" }}
-            placeholder="Search test name..."
+          <SearchInput
             value={search}
-            onChange={(e) => setSearch(e.target.value)}
+            onChange={setSearch}
+            placeholder="Search test name..."
           />
         </div>
 
@@ -196,7 +204,99 @@ export default function ExecutionsPage() {
         </div>
       </div>
 
+      {selectedExecutionId !== null && (
+        <div
+          style={{
+            backgroundColor: "#ffffff",
+            border: "1px solid #E5E7EB",
+            borderRadius: "12px",
+            padding: "18px",
+            marginBottom: "16px",
+            boxShadow: "0 10px 30px rgba(15, 23, 42, 0.05)",
+          }}
+        >
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: "12px", marginBottom: "12px" }}>
+            <div>
+              <h2 style={{ margin: 0, fontSize: "1rem", fontWeight: 700 }}>Execution details</h2>
+              <p style={{ margin: "6px 0 0", color: "#6B7280", fontSize: "13px" }}>
+                Click another row or close this panel to view a different execution.
+              </p>
+            </div>
+            <button
+              onClick={() => setSelectedExecutionId(null)}
+              style={{
+                border: "none",
+                background: "transparent",
+                color: "#374151",
+                cursor: "pointer",
+                fontSize: "14px",
+                fontWeight: 700,
+              }}
+            >
+              Close
+            </button>
+          </div>
+
+          {isLoadingExecution ? (
+            <div style={{ color: "#374151", fontSize: "13px" }}>Loading execution details...</div>
+          ) : executionError ? (
+            <div style={{ color: "#DC2626", fontSize: "13px" }}>Unable to load details.</div>
+          ) : selectedExecution ? (
+            <div style={{ display: "grid", gap: "12px", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))" }}>
+              <div style={{ padding: "12px", border: "1px solid #E5E7EB", borderRadius: "10px" }}>
+                <div style={{ fontSize: "12px", color: "#6B7280", marginBottom: "6px" }}>Test</div>
+                <div style={{ fontWeight: 600, marginBottom: "6px" }}>{selectedExecution.testName}</div>
+                <div style={{ fontSize: "12px", color: "#374151" }}>{selectedExecution.method ?? "—"} {selectedExecution.url ?? "—"}</div>
+              </div>
+
+              <div style={{ padding: "12px", border: "1px solid #E5E7EB", borderRadius: "10px" }}>
+                <div style={{ fontSize: "12px", color: "#6B7280", marginBottom: "6px" }}>Status</div>
+                <div style={{ fontWeight: 600, marginBottom: "6px" }}>{selectedExecution.status}</div>
+                <div style={{ fontSize: "12px", color: "#374151" }}>HTTP {selectedExecution.statusCode ?? "—"}</div>
+              </div>
+
+              <div style={{ padding: "12px", border: "1px solid #E5E7EB", borderRadius: "10px" }}>
+                <div style={{ fontSize: "12px", color: "#6B7280", marginBottom: "6px" }}>Performance</div>
+                <div style={{ fontWeight: 600, marginBottom: "6px" }}>{selectedExecution.responseTime}ms</div>
+                <div style={{ fontSize: "12px", color: "#374151" }}>Executed at {formatDate(selectedExecution.executedAt)}</div>
+              </div>
+
+              <div style={{ padding: "12px", border: "1px solid #E5E7EB", borderRadius: "10px" }}>
+                <div style={{ fontSize: "12px", color: "#6B7280", marginBottom: "6px" }}>Test expectations</div>
+                <div style={{ fontWeight: 600, marginBottom: "6px" }}>Expected {selectedExecution.expectedStatusCode ?? "—"}</div>
+                <div style={{ fontSize: "12px", color: "#374151" }}>Max RT {selectedExecution.maxResponseTime ?? "—"}ms</div>
+                <div style={{ fontSize: "12px", color: "#374151" }}>Last test status: {selectedExecution.testLastStatus ?? "—"}</div>
+              </div>
+
+              <div style={{ gridColumn: "1 / -1", padding: "12px", border: "1px solid #E5E7EB", borderRadius: "10px" }}>
+                <div style={{ fontSize: "12px", color: "#6B7280", marginBottom: "6px" }}>Request details</div>
+                <pre style={{ margin: 0, overflowX: "auto", fontSize: "12px", color: "#1F2937", background: "#F9FAFB", padding: "10px", borderRadius: "8px" }}>
+                  {selectedExecution.headers ? JSON.stringify(selectedExecution.headers, null, 2) : "No headers provided."}
+                </pre>
+              </div>
+
+              <div style={{ gridColumn: "1 / -1", padding: "12px", border: "1px solid #E5E7EB", borderRadius: "10px" }}>
+                <div style={{ fontSize: "12px", color: "#6B7280", marginBottom: "6px" }}>Body payload</div>
+                <pre style={{ margin: 0, overflowX: "auto", fontSize: "12px", color: "#1F2937", background: "#F9FAFB", padding: "10px", borderRadius: "8px" }}>
+                  {selectedExecution.body ? JSON.stringify(selectedExecution.body, null, 2) : "No request body."}
+                </pre>
+              </div>
+
+              {selectedExecution.error && (
+                <div style={{ gridColumn: "1 / -1", padding: "12px", border: "1px solid #FECACA", borderRadius: "10px", background: "#FEF2F2", color: "#991B1B" }}>
+                  <div style={{ fontSize: "12px", fontWeight: 700, marginBottom: "6px" }}>Error details</div>
+                  <div style={{ fontSize: "12px" }}>{selectedExecution.error}</div>
+                </div>
+              )}
+            </div>
+          ) : (
+            <div style={{ color: "#6B7280", fontSize: "13px" }}>Select an execution row to inspect the full request and response details.</div>
+          )}
+        </div>
+      )}
+
       <DataTable<Record<string, unknown>>
+        onRowClick={(row) => setSelectedExecutionId(Number(row.id as string))}
         columns={[
           {
             key: "testName",
