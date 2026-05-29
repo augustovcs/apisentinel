@@ -197,7 +197,9 @@ public class ExecutionsService : IExecutionsService
             Error = e.Error,
             ExecutedAt = e.ExecutedAt
 
-        }).ToList();
+        })
+        .OrderByDescending(x => x.ExecutedAt)
+        .ToList();
     }
 
     public Task<ResponseExecutionDTO> PatchUpdateExecution(RequestExecutionDTO request)

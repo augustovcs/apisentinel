@@ -1,214 +1,162 @@
 # ApiSentinel
 
-> A local web application for automated API monitoring — public or private — with custom rules, scheduled timers, pre-built test templates and a complete request history dashboard.
+> ApiSentinel é uma plataforma self-hosted para monitoramento e automação de APIs, com execução de testes, histórico completo de execuções e dashboard em tempo real.
 
 ---
 
-## 📌 Overview
+## 📌 Visão geral
 
-ApiSentinel is a self-hosted API testing and monitoring tool built for developers who need to validate endpoints continuously without relying on paid external services. It runs entirely on your machine and gives you full control over what gets tested, when, and how.
+Este projeto oferece um painel web para criar, editar e executar testes de API, visualizar histórico de execuções e inspecionar detalhes completos de cada request/response.
 
-You can define test rules from scratch or use ready-made templates, schedule automated runs at custom intervals, inspect detailed response history and get immediate feedback when something breaks — all through a clean web interface.
-
----
-
-## ✨ Features
-
-- **Automated API testing** — define requests (GET, POST, PUT, DELETE, PATCH) with headers, body, query params and auth
-- **Custom rules engine** — assert on status codes, response body fields, response time thresholds, header presence and more
-- **Timers and scheduling** — set each test to run every N seconds/minutes/hours, or trigger manually on demand
-- **Pre-built templates** — ready-to-use test sets for common APIs (REST health checks, auth flows, CRUD sequences)
-- **Persistent history** — every test run is logged with timestamp, response payload, status, latency and rule results
-- **Private and public API support** — test internal services (localhost, VPN) or any external public API
-- **Environment variables** — define base URLs, tokens and secrets per environment (local, staging, production)
+O backend é implementado em C# com ASP.NET Core e integra Supabase + SQL Server para persistência. O frontend é uma aplicação Next.js em TypeScript com React, usando React Query e componentes customizados.
 
 ---
 
-## 🖥️ Tech Stack
+## ✨ Principais recursos
 
-| Component | Technology |
-|-----------|-----------|
-| Backend | C# ASP.NET Core |
-| Frontend | TypeScript + React + Vite |
-| Database | SQLite / SQL Server |
-| HTTP Client | HttpClient (native .NET) |
-| Scheduler | Quartz.NET / BackgroundService |
-| API Docs | Swagger / OpenAPI |
-| Styling | TailwindCSS |
+- Criação e edição de testes de API
+- Execução manual de testes com persistência do resultado
+- Busca e filtros na página de execuções
+- Painel de detalhes ao clicar em uma execução, mostrando headers, body e resultado
+- Dashboard com métricas e lista de execuções recentes
+- Integração com Supabase e SQL Server
+- API REST documentada via Swagger
 
 ---
 
-## 🗂️ Project Structure
+## 🏗️ Estrutura do projeto
 
 ```
-apisentinel/
-├── ApiSentinel.API/              # ASP.NET Core backend
-│   ├── Controllers/
-│   │   ├── EndpointController.cs
-│   │   ├── TestRunController.cs
-│   │   └── HistoryController.cs
-│   ├── Services/
-│   │   ├── TestRunnerService.cs  # Core test execution engine
-│   │   ├── SchedulerService.cs   # Timer management
-│   │   └── RuleEvaluatorService.cs
-│   ├── Models/
-│   │   ├── Endpoint.cs
-│   │   ├── TestRule.cs
-│   │   ├── TestRun.cs
-│   │   └── TestResult.cs
-│   ├── Data/
-│   │   ├── AppDbContext.cs
-│   │   └── Migrations/
-│   └── Program.cs
-│
-├── apisentinel-web/              # React + Vite frontend
+APISentinel/
+├── Backend/
+│   └── apisentinel_net/           # Backend ASP.NET Core
+│       ├── Controllers/           # Endpoints HTTP
+│       ├── Services/              # Lógica de negócio
+│       │   └── APISENTINEL-DEV/    # Serviços de testes e execuções
+│       ├── DTOs/                  # Data Transfer Objects
+│       ├── Models/                # Modelos de domínio e banco
+│       ├── DbContext/             # EF Core DbContext e migrations
+│       ├── Configurations/        # Swagger e configurações
+│       ├── appsettings.json
+│       ├── appsettings.Development.json
+│       └── Program.cs             # Configuração de serviços e pipeline
+├── Frontend/                      # Next.js frontend em TypeScript
 │   ├── src/
-│   │   ├── pages/
-│   │   │   ├── Dashboard.tsx     # Overview of all endpoints and statuses
-│   │   │   ├── EndpointEditor.tsx
-│   │   │   ├── History.tsx
-│   │   │   └── Templates.tsx
-│   │   ├── components/
-│   │   │   ├── RuleBuilder/
-│   │   │   ├── TimerConfig/
-│   │   │   ├── ResponseViewer/
-│   │   │   └── StatusBadge/
-│   │   ├── services/
-│   │   │   └── api.ts
-│   │   └── main.tsx
-│   └── vite.config.ts
-│
-└── docker-compose.yml
+│   │   ├── app/                   # Rotas e páginas do Next.js
+│   │   │   └── dashboard/         # Dashboard, testes e execuções
+│   │   ├── app/services/          # Chamadas para o backend
+│   │   ├── components/            # Componentes UI reutilizáveis
+│   │   └── lib/                   # Tipos e utilitários
+│   ├── package.json
+│   └── tsconfig.json
+├── Configs/                       # Configurações extras
+├── Frontend/README.md             # Documentação do frontend
+└── STUDIES/                       # Anotações e estudos do projeto
 ```
 
 ---
 
-## 🧪 Rule Engine
+## 📡 Backend API
 
-Each endpoint can have one or more rules attached to it. Rules are evaluated after every test run and determine whether the test passed or failed.
+### Testes
 
-### Available rule types
+- `POST /tests/create-tests` — cria um novo teste
+- `PATCH /tests/update/{id}` — atualiza um teste existente
+- `GET /tests/get-tests-full` — lista todos os testes
+- `GET /tests/{id}` — obtém um teste por ID
+- `DELETE /tests/delete/{id}` — apaga um teste
 
-| Rule | Description | Example |
-|------|-------------|---------|
-| `status_code` | Assert exact HTTP status | `== 200` |
-| `response_time` | Assert max latency in ms | `< 500` |
-| `body_contains` | Assert a string is present in response body | `"status": "ok"` |
-| `json_field` | Assert a JSON field value | `data.user.active == true` |
-| `header_present` | Assert a response header exists | `Content-Type` |
-| `header_value` | Assert a response header value | `Content-Type == application/json` |
-| `body_schema` | Validate response body against a JSON Schema | — |
+### Execuções
 
-### Rule configuration example
+- `GET /executions/get-executions-full` — lista execuções com métricas
+- `POST /executions/run-execution` — executa um teste e salva o resultado
+- `GET /executions/{id}` — detalha uma execução específica
 
-```json
-{
-  "endpoint": "https://api.example.com/health",
-  "method": "GET",
-  "interval_seconds": 60,
-  "rules": [
-    { "type": "status_code", "operator": "eq", "value": 200 },
-    { "type": "response_time", "operator": "lt", "value": 400 },
-    { "type": "json_field", "path": "status", "operator": "eq", "value": "healthy" }
-  ]
-}
-```
+### Dashboard
+
+- `GET /pages/dashboard-main` — payload principal para o dashboard
+
+### Documentação
+
+O Swagger fica disponível em modo desenvolvimento com:
+
+- `http://localhost:5199/swagger`
 
 ---
 
-## 📋 Pre-built Templates
+## 💻 Tech stack
 
-ApiSentinel ships with ready-to-use templates so you can start testing immediately:
-
-| Template | Description |
-|----------|-------------|
-| **Health Check** | Simple GET with status 200 assertion and latency threshold |
-| **Auth Flow** | POST login → extract token → use in subsequent requests |
-| **CRUD Sequence** | Create → Read → Update → Delete in order |
-| **Paginated List** | GET list with page/limit params, assert pagination fields |
-| **Rate Limit Probe** | Rapid sequential requests to detect 429 behavior |
+- Backend: `ASP.NET Core` + `C#`
+- Frontend: `Next.js` + `React` + `TypeScript`
+- Estado/consulta: `@tanstack/react-query`
+- Banco de dados: `SQL Server` via Entity Framework Core
+- Integração adicional: `Supabase.Client`
+- Estilo: `Tailwind CSS`
 
 ---
 
-## 📊 History & Dashboard
+## ⚙️ Configurações de ambiente
 
-Every test run is persisted and accessible through the History page. For each run you can see:
+O backend usa as variáveis abaixo no `appsettings.Development.json` ou via variáveis de ambiente:
 
-- Timestamp and duration
-- Full request sent (URL, headers, body)
-- Full response received (status, headers, body)
-- Which rules passed and which failed
-- Latency trend chart over time
+- `SupabaseUrl`
+- `SupabaseKey`
+- `ConnectionStrings:DefaultConnection`
 
-The Dashboard gives a live overview of all configured endpoints with color-coded status indicators (passing, failing, never run, scheduled).
+O frontend espera o backend em `http://localhost:5199` para as chamadas de execução. Ajuste `Frontend/src/app/services/executionsService.ts` caso a porta seja diferente.
 
 ---
 
-## 🔧 Environment Variables
+## 🚀 Como executar
 
-Define environments to switch base URLs and secrets without editing individual endpoint configs:
-
-```
-# .env.local
-SENTINEL_BASE_URL=http://localhost:5000
-SENTINEL_API_KEY=your-local-key
-
-# .env.staging
-SENTINEL_BASE_URL=https://staging.myapp.com
-SENTINEL_API_KEY=staging-key
-```
-
----
-
-## 🚀 Getting Started
-
-### Prerequisites
-- .NET 8 SDK
-- Node.js 18+
-- Docker (optional)
-
-### Running the backend
+### Backend
 
 ```bash
-cd ApiSentinel.API
+cd Backend/apisentinel_net
 dotnet restore
-dotnet ef database update
+dotnet build
 dotnet run
 ```
 
-### Running the frontend
+### Frontend
 
 ```bash
-cd apisentinel-web
+cd Frontend
 npm install
 npm run dev
 ```
 
-### Running with Docker Compose
+### Acessos
 
-```bash
-docker-compose up -d
-```
-
-Access the web interface at `http://localhost:5173` and the API at `http://localhost:5000/swagger`.
+- Frontend: `http://localhost:3000`
+- Swagger backend: `http://localhost:5199/swagger`
 
 ---
 
-## 🗺️ Roadmap
+## 📁 Páginas principais
 
-- [x] Manual endpoint testing
-- [x] Custom rule engine
-- [x] Scheduled test runs with configurable timers
-- [x] Test history with full request/response logs
-- [x] Pre-built templates
-- [ ] Webhook notifications (Slack, Discord, email) on failure
-- [ ] Multi-endpoint chaining (use response data from step A in step B)
-- [ ] Import from Postman / Insomnia collections
-- [ ] Authentication types: Bearer, Basic, API Key, OAuth2
-- [ ] Exportable HTML reports
+- `/dashboard` — visão geral do dashboard
+- `/dashboard/tests` — gerenciamento de testes de API
+- `/dashboard/executions` — histórico de execuções com busca, filtros e detalhes
+- `/dashboard/settings` — configurações da aplicação (se disponíveis)
 
 ---
 
-## 📄 License
+## 🧩 Onde estender
 
-MIT © [augustovcs](https://github.com/augustovcs)
+- Backend: `Backend/apisentinel_net/Services/APISENTINEL-DEV/`
+- Frontend: `Frontend/src/app/services/` e `Frontend/src/components/`
+- Novas rotas: `Frontend/src/app/dashboard/`
+
+---
+
+## 🛠️ Observações
+
+- A pasta `Configs/` contém configurações auxiliares
+- A pasta `STUDIES/` contém documentação de aprendizado e notas de projeto
+
+---
+
+## 📄 Licença
+
+MIT © augustovcs
