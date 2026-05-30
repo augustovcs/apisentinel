@@ -27,7 +27,7 @@ public class ExecutionScheduler : BackgroundService
                 await loader.RunPendingExecutionsAsync(stoppingToken);
 
                 await Task.Delay(
-                    TimeSpan.FromSeconds(5),
+                    TimeSpan.FromSeconds(300), //5 minutes for executing all services.
                     stoppingToken);
             }
         }
