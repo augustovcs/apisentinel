@@ -11,10 +11,12 @@ namespace Services.Dev.Executions;
 public class ExecutionsService : IExecutionsService
 {
 
+    public readonly HttpClient _httpClient;
     public readonly Supabase.Client _supabase;
 
-    public ExecutionsService(Supabase.Client supabase)
+    public ExecutionsService(Supabase.Client supabase, HttpClient httpClient)
     {
+        _httpClient = httpClient;
         _supabase = supabase;
     }
 
@@ -36,7 +38,6 @@ public class ExecutionsService : IExecutionsService
 
         try
         {
-            var httpClient = new HttpClient();
 
             // Define método HTTP dinamicamente
             var httpMethod = new HttpMethod(test.Method);
@@ -66,7 +67,7 @@ public class ExecutionsService : IExecutionsService
             }
 
             // Executa request
-            var response = await httpClient.SendAsync(httpRequest);
+            var response = await _httpClient.SendAsync(httpRequest);
 
             stopwatch.Stop();
 

@@ -1,4 +1,5 @@
 using Specials.DB.TestingClass;
+using Specials.Dev;
 using Supabase;
 using Services.Consorcio;
 using Services.UserService;
@@ -104,7 +105,9 @@ builder.Services.AddScoped<IPagesRequest, PagesRequest>();
 builder.Services.AddScoped<ProductService>();
 builder.Services.AddScoped<IApiKeyGeneratorService, ApiKeyGeneratorService>();
 builder.Services.AddScoped<IGeneralConfigsService, GeneralConfigsService>();
-builder.Services.AddScoped<IExecutionsService, ExecutionsService>();
+builder.Services.AddHttpClient<IExecutionsService, ExecutionsService>();
+builder.Services.AddScoped<ExecutionLoader>();
+builder.Services.AddHostedService<ExecutionScheduler>();
 
 // ---------------------------- //
 
