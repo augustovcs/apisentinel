@@ -10,6 +10,7 @@ import Button from "@/components/ui/Button";
 import PageHeader from "@/components/ui/PageHeader";
 import Spinner from "@/components/ui/Spinner";
 import SearchInput from "@/components/ui/SearchInput";
+import ScheduleModal from "@/components/tests/ScheduleModal";
 import { deleteTests, getTests } from "@/app/services/testsService";
 import { runExecution } from "@/app/services/executionsService";
 import type { ApiTest } from "@/lib/types";
@@ -18,6 +19,9 @@ import { reportWebVitals } from "next/dist/build/templates/pages";
 
 export default function TestsClient() {
   const router = useRouter();
+  const [selectedTestForSchedule, setSelectedTestForSchedule] = useState<ApiTest | null>(null);
+  const [isScheduleModalOpen, setIsScheduleModalOpen] = useState(false);
+  
   const {
     data: tests = [],
     isLoading,
@@ -182,21 +186,28 @@ export default function TestsClient() {
           {
             key: "id",
             header: "Actions",
-            width: "170px",
-            render: (val) => <ActionButtons id={val as number} onDelete={() => deleteMutation.mutate(Number(val))} onRun={() => runMutation.mutate(Number(val))}/>,
+            width: "220px",
+            render: (val) => <ActionButtons id={val as number} onDelete={() => deleteMutation.mutate(Number(val))} onRun={() => runMutation.mutate(Number(val))} onSchedule={() => { setSelectedTestForSchedule(tests.find(t => t.id === val) || null); setIsScheduleModalOpen(true); }}/>,
           },
         ]}
         //tests = dev mockTests = mock view
         data={filteredTests}
         emptyMessage="No tests configured. Create your first test."
       />
-    </div>
-  );
-}
 
-
-
-function ActionButtons({ id, onDelete, onRun }: { id: number, onDelete: () => void, onRun: () => void; }) {
+      <ScheduleModal
+        isOpen={isScheduleModalOpen}
+        onClose={() => setIsScheduleModalOpen(false)}
+        test={selectedTestForSchedule}
+      />
+    </div>, onSchedule }: { id: number, onDelete: () => void, onRun: () => void, onSchedule: () => void; }) {
+  return (
+    <div style={{ display: "flex", gap: "6px" }}>
+      <Link href={`/dashboard/tests/${id}/edit`} style={{ textDecoration: "none" }}>
+        <ActionBtn color="#374151" borderColor="#D1D5DB" hoverBg="#F3F4F6">Edit</ActionBtn>
+      </Link>
+      <ActionBtn color="#27AE60" borderColor="#27AE60" hoverBg="#F0FDF4" onClick={onRun}>Run</ActionBtn>
+      <ActionBtn color="#F59E0B" borderColor="#F59E0B" hoverBg="#FFFBF0" onClick={onSchedule}>Schedule) => void; }) {
   return (
     <div style={{ display: "flex", gap: "6px" }}>
       <Link href={`/dashboard/tests/${id}/edit`} style={{ textDecoration: "none" }}>

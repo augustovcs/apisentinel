@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { getExecutions, getExecutionById } from "@/app/services/executionsService";
 import DataTable from "@/components/ui/DataTable";
 import StatusBadge from "@/components/ui/StatusBadge";
@@ -41,6 +41,7 @@ const selectStyle: React.CSSProperties = {
 };
 
 export default function ExecutionsPage() {
+  const queryClient = useQueryClient();
   const { data: executions = [], isLoading, error } = useQuery({
     queryKey: ["executions"],
     queryFn: getExecutions,
@@ -84,6 +85,10 @@ export default function ExecutionsPage() {
     setSearch("");
   };
 
+  const handleRefresh = () => {
+    queryClient.invalidateQueries({ queryKey: ["executions"] });
+  };
+
   const hasFilters = statusFilter !== "all" || dateFrom || dateTo || search;
 
   if (isLoading) {
@@ -103,11 +108,39 @@ export default function ExecutionsPage() {
       <PageHeader
         title="Executions"
         subtitle={`${filtered.length} of ${executions.length} executions`}
+        actions={
+          <button
+            onClick={handleRefresh}
+            style={{
+              padding: "8px 16px",
+              backgroundColor: "#3B82F6",
+              color: "white",
+              border: "none",
+              borderRadius: "6px",
+              fontSize: "14px",
+              fontWeight: 500,
+              cursor: "pointer",
+              display: "flex",
+              alignItems: "center",
+              gap: "6px",
+              transition: "all 0.2s",
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.backgroundColor = "#2563EB";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.backgroundColor = "#3B82F6";
+            }}
+          >
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <polyline points="23 4 23 10 17 10" />
+              <polyline points="1 20 1 14 7 14" />
+              <path d="M3.51 9a9 9 0 0 1 14.85-3.36M20.49 15a9 9 0 0 1-14.85 3.36" />
+            </svg>
+            Refresh
+          </button>
+        }
       />
-
-      {/* Filters bar */}
-      <div
-        style={{
           backgroundColor: "#ffffff",
           border: "1px solid #E5E7EB",
           padding: "12px 16px",
