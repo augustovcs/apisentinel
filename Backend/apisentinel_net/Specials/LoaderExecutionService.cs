@@ -25,6 +25,11 @@ public class ExecutionLoader
         {
             if (cancellationToken.IsCancellationRequested)
                 break;
+            
+            if (test.ScheduledSeconds < 1)
+            {
+                break;
+            }
 
             try
             {
