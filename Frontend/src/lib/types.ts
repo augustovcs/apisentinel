@@ -79,4 +79,65 @@ export interface DashboardMain {
   recentExecutions: DashboardExecution[];
 }
 
+// Schedule Types
+export interface Schedule {
+  id: number;
+  testId: number;
+  intervalSeconds: number;
+  isActive: boolean;
+  lastExecutedAt: string | null;
+  nextExecutionAt: string | null;
+  createdAt: string;
+  updatedAt: string;
+  name?: string;
+  description?: string;
+  testName?: string;
+}
+
+// ExecutionLog Types
+export type ExecutionLogStatus = "processing" | "success" | "failed" | "timeout";
+
+export interface ExecutionLog {
+  id: number;
+  executionId: number;
+  testId: number;
+  scheduleId: number | null;
+  status: ExecutionLogStatus;
+  message?: string;
+  responseTime?: number;
+  statusCode?: number;
+  errorDetails?: Record<string, unknown>;
+  createdAt: string;
+  updatedAt: string;
+  startedAt?: string;
+  finishedAt?: string;
+  testName?: string;
+  url?: string;
+  method?: string;
+}
+
+// Analytics Types
+export interface ExecutionLogSummary {
+  totalExecutions: number;
+  successfulExecutions: number;
+  failedExecutions: number;
+  processingExecutions: number;
+  averageResponseTime: number;
+  successRate: number;
+}
+
+export interface ExecutionTrend {
+  date: string;
+  successCount: number;
+  failedCount: number;
+  averageResponseTime: number;
+}
+
+export interface AnalyticsData {
+  summary: ExecutionLogSummary;
+  recentExecutions: ExecutionLog[];
+  executionsByStatus: Record<string, number>;
+  executionsByTest: Record<string, number>;
+  executionTrend: ExecutionTrend[];
+}
 
