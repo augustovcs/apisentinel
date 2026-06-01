@@ -52,4 +52,8 @@ public class TestsDTO : RequestTestsDTO
  
     /// <example>2024-06-01T08:00:00</example>
     public DateTime? UpdatedAt { get; set; }
+    /// <example>60 - 1 minute</example>
+    public int ScheduledSeconds {get; set;}
+    /// <example>2024-06-01T08:00:00</example>
+    public DateTime? LastExecutedAt {get; set;}
 }
