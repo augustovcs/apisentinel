@@ -200,20 +200,18 @@ export default function TestsClient() {
         onClose={() => setIsScheduleModalOpen(false)}
         test={selectedTestForSchedule}
       />
-    </div>, onSchedule }: { id: number, onDelete: () => void, onRun: () => void, onSchedule: () => void; }) {
+    </div>
+  );
+}
+
+function ActionButtons({ id, onDelete, onRun, onSchedule }: { id: number, onDelete: () => void, onRun: () => void, onSchedule: () => void; }) {
   return (
     <div style={{ display: "flex", gap: "6px" }}>
       <Link href={`/dashboard/tests/${id}/edit`} style={{ textDecoration: "none" }}>
         <ActionBtn color="#374151" borderColor="#D1D5DB" hoverBg="#F3F4F6">Edit</ActionBtn>
       </Link>
       <ActionBtn color="#27AE60" borderColor="#27AE60" hoverBg="#F0FDF4" onClick={onRun}>Run</ActionBtn>
-      <ActionBtn color="#F59E0B" borderColor="#F59E0B" hoverBg="#FFFBF0" onClick={onSchedule}>Schedule) => void; }) {
-  return (
-    <div style={{ display: "flex", gap: "6px" }}>
-      <Link href={`/dashboard/tests/${id}/edit`} style={{ textDecoration: "none" }}>
-        <ActionBtn color="#374151" borderColor="#D1D5DB" hoverBg="#F3F4F6">Edit</ActionBtn>
-      </Link>
-      <ActionBtn color="#27AE60" borderColor="#27AE60" hoverBg="#F0FDF4" onClick={onRun}>Run</ActionBtn>
+      <ActionBtn color="#F59E0B" borderColor="#F59E0B" hoverBg="#FFFBF0" onClick={onSchedule}>Schedule</ActionBtn>
       <ActionBtn color="#DC2626" borderColor="#FCA5A5" hoverBg="#FEF2F2" onClick={onDelete}>Delete</ActionBtn>
     </div>
   );

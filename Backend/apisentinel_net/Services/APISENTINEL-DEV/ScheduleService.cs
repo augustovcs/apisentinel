@@ -49,7 +49,7 @@ public class ScheduleService : IScheduleService
         {
             Id = createdSchedule.Id,
             TestId = createdSchedule.TestId,
-            IntervalSeconds = createdSchedule.IntervalSeconds,
+            IntervalSeconds = createdSchedule.IntervalSeconds ?? 0,
             IsActive = createdSchedule.IsActive,
             Name = createdSchedule.Name,
             Description = createdSchedule.Description,
@@ -82,7 +82,7 @@ public class ScheduleService : IScheduleService
         {
             Id = schedule.Id,
             TestId = schedule.TestId,
-            IntervalSeconds = schedule.IntervalSeconds,
+            IntervalSeconds = schedule.IntervalSeconds ?? 0,
             IsActive = schedule.IsActive,
             Name = schedule.Name,
             Description = schedule.Description,
@@ -110,7 +110,7 @@ public class ScheduleService : IScheduleService
         {
             Id = s.Id,
             TestId = s.TestId,
-            IntervalSeconds = s.IntervalSeconds,
+            IntervalSeconds = s.IntervalSeconds ?? 0,
             IsActive = s.IsActive,
             Name = s.Name,
             Description = s.Description,
@@ -139,7 +139,7 @@ public class ScheduleService : IScheduleService
         {
             Id = s.Id,
             TestId = s.TestId,
-            IntervalSeconds = s.IntervalSeconds,
+            IntervalSeconds = s.IntervalSeconds ?? 0,
             IsActive = s.IsActive,
             Name = s.Name,
             Description = s.Description,
@@ -184,7 +184,7 @@ public class ScheduleService : IScheduleService
         {
             Id = updatedSchedule.Id,
             TestId = updatedSchedule.TestId,
-            IntervalSeconds = updatedSchedule.IntervalSeconds,
+            IntervalSeconds = updatedSchedule.IntervalSeconds ?? 0,
             IsActive = updatedSchedule.IsActive,
             Name = updatedSchedule.Name,
             Description = updatedSchedule.Description,
