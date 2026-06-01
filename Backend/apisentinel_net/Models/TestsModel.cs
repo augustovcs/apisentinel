@@ -38,5 +38,9 @@ namespace Models.Dev
 
         [Column("updatedat")]
         public DateTime? UpdatedAt { get; set; }
+        [Column("scheduled_seconds")]
+        public int? ScheduledSeconds {get; set;}
+        [Column("last_executed_at")]
+        public DateTime? LastExecutedAt {get; set;}
     }
 }

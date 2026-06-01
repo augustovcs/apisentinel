@@ -13,7 +13,7 @@ namespace Models.Dev
         public long TestId { get; set; }
 
         [Column("interval_seconds")]
-        public int IntervalSeconds { get; set; }
+        public int? IntervalSeconds { get; set; }
 
         [Column("is_active")]
         public bool IsActive { get; set; }
