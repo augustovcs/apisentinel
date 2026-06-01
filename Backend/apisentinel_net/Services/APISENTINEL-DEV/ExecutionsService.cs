@@ -13,11 +13,13 @@ public class ExecutionsService : IExecutionsService
 
     public readonly HttpClient _httpClient;
     public readonly Supabase.Client _supabase;
+    private readonly IExecutionLogService _executionLogService;
 
-    public ExecutionsService(Supabase.Client supabase, HttpClient httpClient)
+    public ExecutionsService(Supabase.Client supabase, HttpClient httpClient, IExecutionLogService executionLogService)
     {
         _httpClient = httpClient;
         _supabase = supabase;
+        _executionLogService = executionLogService;
     }
 
     public async Task<ResponseExecutionDTO> CreateExecution(RequestExecutionDTO request)
@@ -35,10 +37,10 @@ public class ExecutionsService : IExecutionsService
         }
 
         var stopwatch = Stopwatch.StartNew();
+        long executionId = 0;
 
         try
         {
-
             // Define método HTTP dinamicamente
             var httpMethod = new HttpMethod(test.Method);
 
@@ -94,6 +96,30 @@ public class ExecutionsService : IExecutionsService
                 .Insert(execution);
 
             var createdExecution = insertedExecution.Models.First();
+            executionId = createdExecution.Id;
+
+            // Registra log de execução
+            try
+            {
+                var logEntry = new ExecutionLogDTO
+                {
+                    ExecutionId = createdExecution.Id,
+                    TestId = test.Id,
+                    Status = executionStatus == "success" ? "success" : "failed",
+                    Message = executionStatus == "success" ? "Execution completed successfully" : $"Request failed with status {(int)response.StatusCode}",
+                    ResponseTime = (int)stopwatch.ElapsedMilliseconds,
+                    StatusCode = (int)response.StatusCode,
+                    TestName = test.Name,
+                    Url = test.Url,
+                    Method = test.Method
+                };
+                await _executionLogService.CreateLog(logEntry);
+            }
+            catch (Exception logEx)
+            {
+                // Log registration should not fail the execution
+                Console.WriteLine($"Failed to register execution log: {logEx.Message}");
+            }
 
             // Retorno DTO
             return new ResponseExecutionDTO
@@ -122,9 +148,34 @@ public class ExecutionsService : IExecutionsService
                 ExecutedAt = DateTime.UtcNow
             };
 
-            await _supabase
+            var insertedExecution = await _supabase
                 .From<ExecutionModel>()
                 .Insert(execution);
+
+            var createdExecution = insertedExecution.Models.First();
+            executionId = createdExecution.Id;
+
+            // Registra log de erro
+            try
+            {
+                var logEntry = new ExecutionLogDTO
+                {
+                    ExecutionId = createdExecution.Id,
+                    TestId = test.Id,
+                    Status = "failed",
+                    Message = ex.Message,
+                    ResponseTime = (int)stopwatch.ElapsedMilliseconds,
+                    TestName = test.Name,
+                    Url = test.Url,
+                    Method = test.Method,
+                    ErrorDetails = new Dictionary<string, object> { { "exceptionMessage", ex.Message } }
+                };
+                await _executionLogService.CreateLog(logEntry);
+            }
+            catch (Exception logEx)
+            {
+                Console.WriteLine($"Failed to register execution log: {logEx.Message}");
+            }
 
             throw;
         }

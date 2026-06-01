@@ -16,6 +16,8 @@ using apisentinel_net.Services;
 using Microsoft.OpenApi.Models;
 using System.Reflection;
 using Services.Dev.Executions;
+using Services.Dev.Schedules;
+using Services.Dev.Logs;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -106,6 +108,8 @@ builder.Services.AddScoped<ProductService>();
 builder.Services.AddScoped<IApiKeyGeneratorService, ApiKeyGeneratorService>();
 builder.Services.AddScoped<IGeneralConfigsService, GeneralConfigsService>();
 builder.Services.AddHttpClient<IExecutionsService, ExecutionsService>();
+builder.Services.AddScoped<IScheduleService, ScheduleService>();
+builder.Services.AddScoped<IExecutionLogService, ExecutionLogService>();
 builder.Services.AddScoped<ExecutionLoader>();
 builder.Services.AddHostedService<ExecutionScheduler>();
 
