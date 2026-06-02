@@ -26,14 +26,15 @@ public class ExecutionLoader
 
         foreach (var service in services)
         {
-            if (service.LastExecutedAt == null)
+            if (service.NextExecutionAt == null)
             {
                 continue;
             }
-
-            var nextExecution =
-                service.LastExecutedAt.Value.AddSeconds(service.IntervalSeconds);
-
+            /*
+            Console.WriteLine(
+                $"ID={service.Id} | Last={service.LastExecutedAt} | Next={service.NextExecutionAt}"
+            );
+            */
             if (now >= service.NextExecutionAt)
             {
                 await _executionsService.CreateExecution(

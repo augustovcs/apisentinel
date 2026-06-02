@@ -9,12 +9,10 @@ namespace Specials.Dev;
 public class ExecutionScheduler : BackgroundService
 {
     private readonly IServiceProvider _serviceProvider;
-    private readonly IScheduleService _scheduleService;
     
-    public ExecutionScheduler(IServiceProvider serviceProvider, IScheduleService scheduleService)
+    public ExecutionScheduler(IServiceProvider serviceProvider)
     {
         _serviceProvider = serviceProvider;
-        _scheduleService = scheduleService;
     }
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
