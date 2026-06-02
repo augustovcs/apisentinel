@@ -7,42 +7,44 @@ public class ExecutionLoader
 {
     private readonly ITestsService _testsService;
     private readonly IExecutionsService _executionsService;
+    private readonly IScheduleService _scheduleService;
 
     public ExecutionLoader(
         ITestsService testsService,
-        IExecutionsService executionsService)
+        IExecutionsService executionsService, IScheduleService scheduleService)
     {
         _testsService = testsService;
         _executionsService = executionsService;
+        _scheduleService = scheduleService;
     }
 
-    public async Task RunPendingExecutionsAsync(
-        CancellationToken cancellationToken = default)
+    public async Task RunPendingExecutionsAsync(CancellationToken cancellationToken)
     {
-        var tests = await _testsService.GetTestsFull();
+        var services = await _scheduleService.GetActiveSchedules();
 
-        foreach (var test in tests)
+        var now = DateTime.UtcNow;
+
+        foreach (var service in services)
         {
-            if (cancellationToken.IsCancellationRequested)
-                break;
-            
-            if (test.ScheduledSeconds < 1)
+            if (service.LastExecutedAt == null)
             {
-                break;
+                continue;
             }
 
-            try
+            var nextExecution =
+                service.LastExecutedAt.Value.AddSeconds(service.IntervalSeconds);
+
+            if (now >= service.NextExecutionAt)
             {
                 await _executionsService.CreateExecution(
                     new RequestExecutionDTO
                     {
-                        TestId = test.Id
-                    });
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(
-                    $"Erro ao executar teste {test.Id}: {ex.Message}");
+                        TestId = service.TestId
+                    }
+                );
+
+
+                await _scheduleService.UpdateExecutionInfo(service.Id, now, now.AddSeconds(service.IntervalSeconds));
             }
         }
     }

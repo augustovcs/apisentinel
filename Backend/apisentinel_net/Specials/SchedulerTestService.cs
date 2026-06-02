@@ -9,28 +9,38 @@ namespace Specials.Dev;
 public class ExecutionScheduler : BackgroundService
 {
     private readonly IServiceProvider _serviceProvider;
-
-    public ExecutionScheduler(IServiceProvider serviceProvider)
+    private readonly IScheduleService _scheduleService;
+    
+    public ExecutionScheduler(IServiceProvider serviceProvider, IScheduleService scheduleService)
     {
         _serviceProvider = serviceProvider;
+        _scheduleService = scheduleService;
     }
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
+{
+    while (!stoppingToken.IsCancellationRequested)
+    {
+        try
         {
-            while (!stoppingToken.IsCancellationRequested)
-            {
-                using var scope = _serviceProvider.CreateScope();
+            using var scope = _serviceProvider.CreateScope();
 
-                var loader =
-                    scope.ServiceProvider.GetRequiredService<ExecutionLoader>();
+            var loader = scope.ServiceProvider
+                .GetRequiredService<ExecutionLoader>();
 
-                await loader.RunPendingExecutionsAsync(stoppingToken);
+            await loader.RunPendingExecutionsAsync(stoppingToken);
 
-                await Task.Delay(
-                    TimeSpan.FromSeconds(300), //5 minutes for executing all services.
-                    stoppingToken);
-            }
+            // Verifica novamente em 5 segundos
+            await Task.Delay(TimeSpan.FromSeconds(5), stoppingToken);
         }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex);
+
+            await Task.Delay(TimeSpan.FromSeconds(5), stoppingToken);
+        }
+    }
+}
 }
     
 

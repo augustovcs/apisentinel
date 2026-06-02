@@ -196,6 +196,28 @@ public class ScheduleService : IScheduleService
         };
     }
 
+    public async Task UpdateExecutionInfo(
+    long scheduleId,
+    DateTime executedAt,
+    DateTime nextExecutionAt)
+    {
+        var schedule = await _supabase
+            .From<ScheduleModel>()
+            .Where(x => x.Id == scheduleId)
+            .Single();
+
+        if (schedule == null)
+            throw new Exception("Schedule not found.");
+
+        schedule.LastExecutedAt = executedAt;
+        schedule.NextExecutionAt = nextExecutionAt;
+        schedule.UpdatedAt = DateTime.UtcNow;
+
+        await _supabase
+            .From<ScheduleModel>()
+            .Update(schedule);
+    }
+
     public async Task<bool> DeleteSchedule(long id)
     {
         var schedule = await _supabase

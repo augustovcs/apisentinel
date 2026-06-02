@@ -11,4 +11,8 @@ public interface IScheduleService
     Task<ResponseScheduleDTO> UpdateSchedule(UpdateScheduleDTO request);
     Task<bool> DeleteSchedule(long id);
     Task<bool> ToggleSchedule(long id, bool isActive);
+    Task UpdateExecutionInfo(long scheduleId,
+    DateTime executedAt,
+    DateTime nextExecutionAt);
+
 }
