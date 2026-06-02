@@ -121,6 +121,9 @@ public class ExecutionsService : IExecutionsService
                 Console.WriteLine($"Failed to register execution log: {logEx.Message}");
             }
 
+            // Atualiza o último status do teste com o resultado desta execução
+            await UpdateTestLastStatus(test.Id, executionStatus);
+
             // Retorno DTO
             return new ResponseExecutionDTO
             {
@@ -177,9 +180,31 @@ public class ExecutionsService : IExecutionsService
                 Console.WriteLine($"Failed to register execution log: {logEx.Message}");
             }
 
+            // Atualiza o último status do teste como falha
+            await UpdateTestLastStatus(test.Id, "failed");
+
             throw;
         }
 
+    }
+
+    // Persiste o último status conhecido do teste para refletir na listagem de Tests
+    private async Task UpdateTestLastStatus(long testId, string status)
+    {
+        try
+        {
+            await _supabase
+                .From<TestsModel>()
+                .Where(x => x.Id == testId)
+                .Set(x => x.LastStatus, status)
+                .Set(x => x.LastExecutedAt, DateTime.UtcNow)
+                .Update();
+        }
+        catch (Exception ex)
+        {
+            // Atualizar o status não deve quebrar a execução
+            Console.WriteLine($"Failed to update test last status: {ex.Message}");
+        }
     }
 
     public Task<bool> DeleteExecutionById(int id)
