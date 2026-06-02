@@ -12,8 +12,8 @@ public class RequestScheduleDTO
 public class ResponseScheduleDTO : RequestScheduleDTO
 {
     public long Id { get; set; }
-    public DateTime? LastExecutedAt { get; set; }
-    public DateTime? NextExecutionAt { get; set; }
+    public DateTimeOffset? LastExecutedAt { get; set; }
+    public DateTimeOffset? NextExecutionAt { get; set; }
     public DateTime CreatedAt { get; set; }
     public DateTime UpdatedAt { get; set; }
     public string? TestName { get; set; }

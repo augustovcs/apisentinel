@@ -36,7 +36,7 @@ public class ScheduleService : IScheduleService
             Description = request.Description,
             CreatedAt = DateTime.UtcNow,
             UpdatedAt = DateTime.UtcNow,
-            NextExecutionAt = DateTime.UtcNow.AddSeconds(request.IntervalSeconds)
+            NextExecutionAt = DateTimeOffset.UtcNow.AddSeconds(request.IntervalSeconds)
         };
 
         var insertedSchedule = await _supabase
@@ -198,8 +198,8 @@ public class ScheduleService : IScheduleService
 
     public async Task UpdateExecutionInfo(
     long scheduleId,
-    DateTime executedAt,
-    DateTime nextExecutionAt)
+    DateTimeOffset executedAt,
+    DateTimeOffset nextExecutionAt)
     {
         var schedule = await _supabase
             .From<ScheduleModel>()

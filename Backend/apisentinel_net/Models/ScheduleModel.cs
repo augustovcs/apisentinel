@@ -19,10 +19,10 @@ namespace Models.Dev
         public bool IsActive { get; set; }
 
         [Column("last_executed_at")]
-        public DateTime? LastExecutedAt { get; set; }
+        public DateTimeOffset? LastExecutedAt { get; set; }
 
         [Column("next_execution_at")]
-        public DateTime? NextExecutionAt { get; set; }
+        public DateTimeOffset? NextExecutionAt { get; set; }
 
         [Column("created_at")]
         public DateTime CreatedAt { get; set; }
