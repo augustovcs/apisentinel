@@ -1,5 +1,6 @@
 using Interface.Dev;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.VisualBasic;
 
 namespace Controllers.Development;
 
@@ -19,8 +20,6 @@ public class PagesController : ControllerBase
     /// </summary>
     [HttpGet("dashboard-main")]
     public async Task<IActionResult> GetDashboardMain()
-    {
-        var data = await _pages.GetDashboardMainAsync();
-        return Ok(data);
-    }
+     => Ok(await _pages.GetDashboardMainAsync());
+   
 }
